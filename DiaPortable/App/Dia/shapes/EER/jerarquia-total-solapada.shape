@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg">
+  <name>EER - jerarquia-total-solapada</name>
+  <description>Jerarquia total solapada</description>
+  <icon>jerarquia-total-solapada.png</icon>
+  <connections>
+    <point x="5" y="-3"/>
+    <point x="1.25" y="2.5"/>
+    <point x="2.5" y="5"/>
+    <point x="3.75" y="7.5"/>
+    <point x="5" y="10"/>
+    <point x="8.75" y="2.5"/>
+    <point x="7.5" y="5"/>
+    <point x="6.25" y="7.5"/>
+    <point x="5" y="5" main="yes"/>
+  </connections>
+  <aspectratio type="free"/>
+  <svg:svg width="10" height="10">
+    <svg:circle cx="5" cy="-2" r="1" style="fill: default"/> 
+    <svg:polygon points="0,0 10,0 5,10" style="fill: default"/>
+  </svg:svg>
+</shape>

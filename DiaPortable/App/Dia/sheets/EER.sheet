@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sheet xmlns="http://www.lysator.liu.se/~alla/dia/dia-sheet-ns">
+<!--Dia-Version: 0.97.3-->
+<!--Archivo: /home/jose/.dia/sheets/EER.sheet-->
+<!--Fecha: Fri Sep 30 16:39:22 2016-->
+<!--Para: jose  (jamj2000@gmail.com -->
+
+<name>EER</name>
+<description>Extended Entity-Relationship</description>
+<contents>
+<object name="ER - Entity" intdata="0"><description>Entidad</description></object>
+<object name="ER - Entity" intdata="1"><description>Entidad débil</description><icon>ER/weakentity.png</icon></object>
+<object name="ER - Relationship"><description>Relación</description></object>
+<object name="EER - atributo-pk"><description>Clave primaria</description></object>
+<object name="EER - atributo"><description>Atributo</description></object>
+<object name="EER - jerarquia-total-exclusiva"><description>Jerarquía total exclusiva</description></object>
+<object name="EER - jerarquia-total-solapada"><description>Jerarquía total solapada</description></object>
+<object name="EER - jerarquia-parcial-exclusiva"><description>Jerarquía parcial exclusiva</description></object>
+<object name="EER - jerarquia-parcial-solapada"><description>Jerarquía parcial solapada</description></object>
+</contents>
+</sheet>

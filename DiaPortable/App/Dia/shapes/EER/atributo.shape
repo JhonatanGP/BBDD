@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg">
+  <name>EER - atributo</name>
+  <description>Atributo</description>
+  <icon>atributo.png</icon>
+  <default-width>1</default-width> 
+  <default-height>1</default-height>
+  <connections>
+    <point x="0.5" y="1"/>
+    <point x="0.5" y="0"/>
+    <point x="0" y="0.5"/>
+    <point x="1" y="0.5"/>
+    <point x="0.5" y="0.5" main="yes"/>
+  </connections>
+  <textbox x1="0.3" y1="-5" x2="0.5" y2="-0.1"/>
+  <aspectratio type="fixed"/>
+  <svg:svg>
+    <svg:circle style="fill: default" cx="0.5" cy="0.5" r="0.5"/>
+  </svg:svg>
+</shape>
