@@ -2,7 +2,7 @@
 <dia:persistence xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
   <dia:window role="dia-main-window">
     <dia:attribute name="xpos">
-      <dia:int val="-6"/>
+      <dia:int val="-7"/>
     </dia:attribute>
     <dia:attribute name="ypos">
       <dia:int val="1"/>
@@ -50,12 +50,12 @@ ER
 Diagrama de flujo#</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="diagram-tree-hidden-types">
+  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="arrow-menu">
+  <dia:list role="diagram-tree-hidden-types">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
