@@ -36,7 +36,13 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\Diagrama1.dia
+      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\02GEOGRAFÍA.dia
+C:\Users\jguzman5292\Desktop\BBDD\10-10\Diagrama1.dia
+C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\ExamenEJ1.dia
+C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\TIENDA.dia
+C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\GUERRA.dia.GUERRA
+C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\Diagrama1.dia
+C:\Users\jguzman5292\Desktop\BBDD\Diagrama1.dia
 C:\Users\jguzman5292\Downloads\ejercicio-3.dia
 C:\Users\jguzman5292\Downloads\ejercicio-2.dia
 C:\Users\jguzman5292\Downloads\ej1-1.dia
@@ -50,12 +56,12 @@ ER
 Diagrama de flujo#</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="arrow-menu">
+  <dia:list role="diagram-tree-hidden-types">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="diagram-tree-hidden-types">
+  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
@@ -108,6 +114,11 @@ Diagrama de flujo#</dia:string>
   <dia:integer role="diagram_tree_dia_sort">
     <dia:attribute name="intvalue">
       <dia:int val="2"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="import-filter">
+    <dia:attribute name="intvalue">
+      <dia:int val="0"/>
     </dia:attribute>
   </dia:integer>
   <dia:real role="start-arrow-width">
