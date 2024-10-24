@@ -36,7 +36,10 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\02GEOGRAFÍA.dia
+      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\03GUERRA.dia
+C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\GUERRA.png
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\01ACADEMIA.dia
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\02GEOGRAFÍA.dia
 C:\Users\jguzman5292\Desktop\BBDD\10-10\Diagrama1.dia
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\ExamenEJ1.dia
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\TIENDA.dia
@@ -61,17 +64,17 @@ Diagrama de flujo#</dia:string>
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="arrow-menu">
-    <dia:attribute name="listvalue">
-      <dia:string>##</dia:string>
-    </dia:attribute>
-  </dia:list>
   <dia:list role="color-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
   <dia:list role="font-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>##</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
