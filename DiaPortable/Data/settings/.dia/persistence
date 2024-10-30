@@ -36,12 +36,16 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\04BIBLIOTECA_V2.dia
+      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\05VUELOS.dia
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN_EJ1.dia
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN_EJ2.dia
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN.dia
+C:\Users\jguzman5292\Desktop\BBDD\10-10\Diagrama1.dia
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\04BIBLIOTECA_V2.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\03GUERRA.dia
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\GUERRA.png
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\01ACADEMIA.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\02GEOGRAFÍA.dia
-C:\Users\jguzman5292\Desktop\BBDD\10-10\Diagrama1.dia
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\ExamenEJ1.dia
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\TIENDA.dia
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\GUERRA.dia.GUERRA
@@ -60,7 +64,7 @@ ER
 Diagrama de flujo#</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="arrow-menu">
+  <dia:list role="diagram-tree-hidden-types">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
@@ -75,7 +79,7 @@ Diagrama de flujo#</dia:string>
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="diagram-tree-hidden-types">
+  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
