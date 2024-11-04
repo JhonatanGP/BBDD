@@ -2,16 +2,16 @@
 <dia:persistence xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
   <dia:window role="dia-main-window">
     <dia:attribute name="xpos">
-      <dia:int val="-7"/>
+      <dia:int val="-8"/>
     </dia:attribute>
     <dia:attribute name="ypos">
-      <dia:int val="1"/>
+      <dia:int val="-8"/>
     </dia:attribute>
     <dia:attribute name="width">
-      <dia:int val="1916"/>
+      <dia:int val="1920"/>
     </dia:attribute>
     <dia:attribute name="height">
-      <dia:int val="999"/>
+      <dia:int val="1017"/>
     </dia:attribute>
     <dia:attribute name="isopen">
       <dia:boolean val="true"/>
@@ -36,7 +36,8 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\05VUELOS.dia
+      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\EJEXTRA01.dia
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\05VUELOS.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN_EJ1.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN_EJ2.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN.dia
@@ -64,6 +65,11 @@ ER
 Diagrama de flujo#</dia:string>
     </dia:attribute>
   </dia:list>
+  <dia:list role="arrow-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>##</dia:string>
+    </dia:attribute>
+  </dia:list>
   <dia:list role="diagram-tree-hidden-types">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
@@ -75,11 +81,6 @@ Diagrama de flujo#</dia:string>
     </dia:attribute>
   </dia:list>
   <dia:list role="font-menu">
-    <dia:attribute name="listvalue">
-      <dia:string>##</dia:string>
-    </dia:attribute>
-  </dia:list>
-  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
