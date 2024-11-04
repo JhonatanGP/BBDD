@@ -36,7 +36,8 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\EJEXTRA01.dia
+      <dia:string>#C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\EJEXTRA01.dia
+C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\EJEXTRA01.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\05VUELOS.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN_EJ1.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN_EJ2.dia
@@ -70,17 +71,17 @@ Diagrama de flujo#</dia:string>
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="diagram-tree-hidden-types">
-    <dia:attribute name="listvalue">
-      <dia:string>##</dia:string>
-    </dia:attribute>
-  </dia:list>
   <dia:list role="color-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
   <dia:list role="font-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>##</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="diagram-tree-hidden-types">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
