@@ -72,7 +72,107 @@ ALTER TABLE LOCALIDADES ADD PRIMARY KEY (ID) ;
 ALTER TABLE ALUMNOS ADD ID_LOCALIDAD INT; 
 ALTER TABLE ALUMNOS ADD FOREIGN KEY (ID_LOCALIDAD) REFERENCES LOCALIDADES(ID);
 
+--07/11/2024
+
 --PDF 2 AMPLIACIÓN DE TABLAS 
+--ACT 1
+DROP TABLE PIEZAS;
+CREATE TABLE PIEZAS (
+    ID INT,
+    NOMBRE VARCHAR2(100),
+    ID_FABRICANTE INT
+);
+DROP TABLE FABRICANTES;
+CREATE TABLE FABRICANTES (
+    ID INT,
+    MARCA VARCHAR2(50)
+);
+ALTER TABLE PIEZAS ADD PRIMARY KEY (ID);
+ALTER TABLE FABRICANTES ADD PRIMARY KEY (ID);
+ALTER TABLE PIEZAS ADD FOREIGN KEY (ID_FABRICANTE) REFERENCES FABRICANTES (ID);
+
+--ACT 2
+/*Incluye un nuevo campo en la tabla piezas de la actividad 1 que se llame precio y sea number con cuatro dígitos, de
+los cuáles dos serán decimales. Ahora crea una restricción CHECK en el campo precio que permita solo valores de 
+precio mayores que cero. */
+ALTER TABLE PIEZAS ADD PRECIO NUMBER (4,2);
+ALTER TABLE PIEZAS ADD CONSTRAINT CHKPRECIO CHECK (PRECIO>0);
+
+--ACT 3
+/*Incluye un nuevo campo en la tabla piezas de la actividad 1 que se llame código, tipo char con 5 caracteres con la
+siguiente estructura (restricción):
+    ? Primero la letra P.
+    ? Segundo, tres números que van de 0 a 9 cada uno de ellos.
+    ? Final una letra cualquiera del abecedario en mayúsculas. */
+ALTER TABLE PIEZAS ADD CODIGO CHAR(5);
+ALTER TABLE PIEZAS ADD CONSTRAINT CHK CHECK (REGEXP_LIKE(CODIGO,'[P],[0-9],[0-9],[0-9],[A-Z]'));
+
+-- ACT4 
+/* Añade una restricción al campo marca de la tabla fabricantes, permitiendo que solo se puedan guardar los siguientes
+valores en ese campo:
+    ? FABRIC1
+    ? FABRIC2
+    ? FABRIC3
+Puedes usar tanto IN como encadenar diferentes condiciones con OR. */
+ALTER TABLE FABRICANTES ADD CONSTRAINT MARCA CHECK(MARCA IN ('FABRIC1','FABRIC2','FABRIC3'));
+
+-- PDF 3 ACTIVIDADES
+/*Actividad 1
+Crea una tabla COCHES que tenga los siguientes campos: La primary key es ID
+    • ID: entero
+    • Modelo: varchar 100
+    • Marca: varchar 50
+    • CV: entero
+    • Consumo100: number */
+CREATE TABLE COCHES(
+    ID INT PRIMARY KEY,
+    MODELO VARCHAR(100),
+    MARCA VARCHAR(50),
+    CV INT,
+    CONSUMO100 NUMBER
+);
+ 
+/*Actividad 2
+Crea una tabla COMPRAS que tenga los siguientes campos:
+    • ID: entero
+    • Cliente: varchar 100
+    • FechaCompra: date
+    • idCoche: entero
+La primary key es ID. idCoche es foreign key de ID en COCHES */   
+CREATE TABLE COMPRAS(
+    ID INT PRIMARY KEY,
+    CLIENTE VARCHAR(100),
+    FECHACOMPRA DATE,
+    IDCOCHE INT,
+    CONSUMO100 NUMBER
+);
+ALTER TABLE COMPRAS ADD FOREIGN KEY (IDCOCHE) REFERENCES COCHES (ID); 
+// ALTER TABLE COMPRAS ADD CONSTRAINT FKIDCOCHE FOREIGN KEY (IDCOCHE) REFERENCES COCHES(ID);
+
+/*Actividad 3
+Crea una tabla PIEZAS que tenga los siguientes campos:
+    • codigo: entero
+    • idAlmacen: entero
+    • Nombre: varchar(50)
+    • Peso: number
+La primary key es compuesta por código y por idAlmacen. */
+CREATE TABLE PIEZAS1(
+    CODIGO INT,
+    IDALMACEN INT,
+    NOMBRE VARCHAR(50),
+    PESO NUMBER,
+    PRIMARY KEY (CODIGO,IDALMACEN)
+);
+DROP TABLE COCHES CASCADE CONSTRAINTS;
+
+--ACT 5: Borra de la tabla COCHES la PK.
+ALTER TABLE COCHES DROP PRIMARY KEY;
+--Actividad 6: Renombra la tabla COCHES por la palabra VEHICULOS.
+RENAME COCHES TO VEHICULOS;
 
 
-
+    
+    
+    
+    
+    
