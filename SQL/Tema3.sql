@@ -14,6 +14,8 @@ ALTER TABLE CCAAS RENAME COLUMN SUPERFICIE TO SUPERF;
 ALTER TABLE CCAAS DROP COLUMN NOMBRE;
 -- PARA BORRAR UNA TABLA Y TODAS SUS RESTRICCIONES DE LAS QUE DEPENDA (PK Y FK) SE USA CASCADE CONSTRAINTS
 DROP TABLE ALUMNOS CASCADE CONSTRAINTS SYS_C008321 ;
+--PARA BORRAR UNA RESTRICCION COMO UNA FK ES
+ALTER TABLE PEDIDOS DROP CONSTRAINT FK_PEDIDOS_PRODUCTOS;
 
 -- 06/11/2024
 --  PDF 1 INTRODUCCIÓN
@@ -101,18 +103,18 @@ ALTER TABLE PIEZAS ADD CONSTRAINT CHKPRECIO CHECK (PRECIO>0);
 --ACT 3
 /*Incluye un nuevo campo en la tabla piezas de la actividad 1 que se llame código, tipo char con 5 caracteres con la
 siguiente estructura (restricción):
-    ? Primero la letra P.
-    ? Segundo, tres números que van de 0 a 9 cada uno de ellos.
-    ? Final una letra cualquiera del abecedario en mayúsculas. */
+    • Primero la letra P.
+    • Segundo, tres números que van de 0 a 9 cada uno de ellos.
+    • Final una letra cualquiera del abecedario en mayúsculas. */
 ALTER TABLE PIEZAS ADD CODIGO CHAR(5);
 ALTER TABLE PIEZAS ADD CONSTRAINT CHK CHECK (REGEXP_LIKE(CODIGO,'[P],[0-9],[0-9],[0-9],[A-Z]'));
 
 -- ACT4 
 /* Añade una restricción al campo marca de la tabla fabricantes, permitiendo que solo se puedan guardar los siguientes
 valores en ese campo:
-    ? FABRIC1
-    ? FABRIC2
-    ? FABRIC3
+    • FABRIC1
+    • FABRIC2
+    • FABRIC3
 Puedes usar tanto IN como encadenar diferentes condiciones con OR. */
 ALTER TABLE FABRICANTES ADD CONSTRAINT MARCA CHECK(MARCA IN ('FABRIC1','FABRIC2','FABRIC3'));
 
