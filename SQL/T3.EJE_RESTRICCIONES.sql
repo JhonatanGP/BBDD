@@ -26,6 +26,7 @@ CREATE TABLE PERSONAS(
 ALTER TABLE PERSONAS ADD TALLA VARCHAR2(2) CHECK (TALLA IN ('S','M','L','XL'));
  
  --ACTIVIDADES REPASOEXAMEN
+DROP TABLE PRODUCTOS1 CASCADE CONSTRAINTS;
 CREATE TABLE PRODUCTOS1(
      ID INT,
      NOMBRE VARCHAR2(100),
@@ -36,6 +37,7 @@ CREATE TABLE CLIENTES(
      NOMBRE VARCHAR2(50),
      FECHA_NACIMIENTO DATE
 );
+DROP TABLE PEDIDOS CASCADE CONSTRAINTS;
 CREATE TABLE PEDIDOS(
      ID_PRODUCTO INT,
      ID_CLIENTE INT,
@@ -48,7 +50,7 @@ ALTER TABLE CLIENTES ADD CONSTRAINT PK_CLIENTES PRIMARY KEY(CODIGO);
 ALTER TABLE PEDIDOS ADD CONSTRAINT PK_PEDIDOS PRIMARY KEY(ID_PRODUCTO,ID_CLIENTE);
 
 --5. Haz FK del campo id_producto de la tabla pedidos respecto del campo id de la tabla productos. El nombre de esta FK tiene que ser fk_pedidos_productos.
-ALTER TABLE  ADD CONSTRAINT PK_PRODUCTO1 PRIMARY KEY(ID);
+//ALTER TABLE  ADD CONSTRAINT PK_PRODUCTO1 PRIMARY KEY(ID);
 
 --6. Haz FK del campo id_cliente de la tabla pedidos respecto del campo codigo de la tabla clientes. El nombre de esta FK tiene que ser fk_pedidos_clientes.
 
@@ -65,4 +67,3 @@ ALTER TABLE  ADD CONSTRAINT PK_PRODUCTO1 PRIMARY KEY(ID);
 /*10. Cambia los siguientes datos del campo creado para la tabla clientes:
 - Ahora se llamará id_provincia en lugar de provincia.
 - El tipo de dato ahora será id. */
-    

@@ -2,16 +2,16 @@
 <dia:persistence xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
   <dia:window role="dia-main-window">
     <dia:attribute name="xpos">
-      <dia:int val="-8"/>
+      <dia:int val="-7"/>
     </dia:attribute>
     <dia:attribute name="ypos">
-      <dia:int val="-8"/>
+      <dia:int val="0"/>
     </dia:attribute>
     <dia:attribute name="width">
-      <dia:int val="1920"/>
+      <dia:int val="631"/>
     </dia:attribute>
     <dia:attribute name="height">
-      <dia:int val="1017"/>
+      <dia:int val="1008"/>
     </dia:attribute>
     <dia:attribute name="isopen">
       <dia:boolean val="true"/>
@@ -36,7 +36,9 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\EJEXTRA01.dia
+      <dia:string>#C:\Users\jguzman5292\Downloads\ejercicio-2.dia
+C:\Users\jguzman5292\Downloads\ejercicio1.dia
+C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\EJEXTRA01.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\EJEXTRA01.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\05VUELOS.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\GUZMAN_PANOZO_JHONATAN_EJ1.dia
@@ -54,7 +56,6 @@ C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\GUERRA.dia.GUERRA
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\Diagrama1.dia
 C:\Users\jguzman5292\Desktop\BBDD\Diagrama1.dia
 C:\Users\jguzman5292\Downloads\ejercicio-3.dia
-C:\Users\jguzman5292\Downloads\ejercicio-2.dia
 C:\Users\jguzman5292\Downloads\ej1-1.dia
 C:\Users\jguzman5292\Desktop\Diagrama1.dia#</dia:string>
     </dia:attribute>
@@ -64,6 +65,11 @@ C:\Users\jguzman5292\Desktop\Diagrama1.dia#</dia:string>
       <dia:string>#EER
 ER
 Diagrama de flujo#</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="diagram-tree-hidden-types">
+    <dia:attribute name="listvalue">
+      <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
   <dia:list role="arrow-menu">
@@ -77,11 +83,6 @@ Diagrama de flujo#</dia:string>
     </dia:attribute>
   </dia:list>
   <dia:list role="font-menu">
-    <dia:attribute name="listvalue">
-      <dia:string>##</dia:string>
-    </dia:attribute>
-  </dia:list>
-  <dia:list role="diagram-tree-hidden-types">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
