@@ -2,16 +2,16 @@
 <dia:persistence xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
   <dia:window role="dia-main-window">
     <dia:attribute name="xpos">
-      <dia:int val="-7"/>
+      <dia:int val="-8"/>
     </dia:attribute>
     <dia:attribute name="ypos">
-      <dia:int val="0"/>
+      <dia:int val="-8"/>
     </dia:attribute>
     <dia:attribute name="width">
-      <dia:int val="631"/>
+      <dia:int val="1920"/>
     </dia:attribute>
     <dia:attribute name="height">
-      <dia:int val="1008"/>
+      <dia:int val="1017"/>
     </dia:attribute>
     <dia:attribute name="isopen">
       <dia:boolean val="true"/>
@@ -36,7 +36,8 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Downloads\ejercicio-2.dia
+      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\DIA\10-10\Diagrama1.dia
+C:\Users\jguzman5292\Downloads\ejercicio-2.dia
 C:\Users\jguzman5292\Downloads\ejercicio1.dia
 C:\Users\jguzman5292\Desktop\CEU\BBDD1\1TRIM\EJEXTRA01.dia
 C:\Users\jguzman5292\Desktop\BBDD\ENTREGAS\EJEXTRA01.dia
@@ -72,17 +73,17 @@ Diagrama de flujo#</dia:string>
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="arrow-menu">
-    <dia:attribute name="listvalue">
-      <dia:string>##</dia:string>
-    </dia:attribute>
-  </dia:list>
   <dia:list role="color-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
   <dia:list role="font-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>##</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
