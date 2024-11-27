@@ -8,6 +8,7 @@ CREATE TABLE LOTES(
     PRECIO_KG_VENDIDO NUMBER(8,2),
     FECHA DATE
 );
+alter table LOTES MODIFY CODIGO NUMBER;
 ALTER TABLE LOTES ADD CONSTRAINT PK_LOTES PRIMARY KEY(CODIGO);
 ALTER TABLE LOTES ADD CONSTRAINT NUM_KG CHECK(NUM_KG > 0);
 ALTER TABLE LOTES ADD CONSTRAINT PRECIO_KG_SALIDA CHECK(PRECIO_KG_SALIDA > 0);
@@ -50,7 +51,7 @@ ALTER TABLE CLIENTES ADD CONSTRAINT PK_CLIENTES PRIMARY KEY(CODIGO);
 ALTER TABLE PEDIDOS ADD CONSTRAINT PK_PEDIDOS PRIMARY KEY(ID_PRODUCTO,ID_CLIENTE);
 
 --5. Haz FK del campo id_producto de la tabla pedidos respecto del campo id de la tabla productos. El nombre de esta FK tiene que ser fk_pedidos_productos.
-//ALTER TABLE  ADD CONSTRAINT PK_PRODUCTO1 PRIMARY KEY(ID);
+--ALTER TABLE  ADD CONSTRAINT PK_PRODUCTO1 PRIMARY KEY(ID);
 
 --6. Haz FK del campo id_cliente de la tabla pedidos respecto del campo codigo de la tabla clientes. El nombre de esta FK tiene que ser fk_pedidos_clientes.
 
