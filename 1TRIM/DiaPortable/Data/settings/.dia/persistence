@@ -36,7 +36,8 @@
   </dia:window>
   <dia:list role="recent-files">
     <dia:attribute name="listvalue">
-      <dia:string>#C:\Users\jguzman5292\Desktop\EXAMEN_GUZMAN_PANOZO_JHONATA_EJ1.dia
+      <dia:string>#C:\Users\jguzman5292\Desktop\BBDD\1TRIM\EXAMEN_JGUZMAN\EXAMEN_GUZMAN_PANOZO_JHONATA_EJ1.dia
+C:\Users\jguzman5292\Desktop\EXAMEN_GUZMAN_PANOZO_JHONATA_EJ1.dia
 C:\Users\jguzman5292\Desktop\BBDD\DIA\10-10\Diagrama1.dia
 C:\Users\jguzman5292\Downloads\ejercicio-2.dia
 C:\Users\jguzman5292\Downloads\ejercicio1.dia
@@ -69,12 +70,12 @@ ER
 Diagrama de flujo#</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="arrow-menu">
+  <dia:list role="diagram-tree-hidden-types">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="diagram-tree-hidden-types">
+  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
