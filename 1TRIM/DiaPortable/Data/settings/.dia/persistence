@@ -75,17 +75,17 @@ Diagrama de flujo#</dia:string>
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
-  <dia:list role="arrow-menu">
-    <dia:attribute name="listvalue">
-      <dia:string>##</dia:string>
-    </dia:attribute>
-  </dia:list>
   <dia:list role="color-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
   </dia:list>
   <dia:list role="font-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>##</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="arrow-menu">
     <dia:attribute name="listvalue">
       <dia:string>##</dia:string>
     </dia:attribute>
