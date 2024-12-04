@@ -115,7 +115,15 @@ SELECT NOMBRE FROM FUTBOLISTAS WHERE NOMBRE LIKE '%E%'; -- % PARA QUE EMPIECE O 
 SELECT NOMBRE FROM FUTBOLISTAS WHERE NOMBRE LIKE '_E%'; -- % DELANTE DE E SE PONE _ PUEDE SER CUALQUIERA, DETRAS DE % DA IGUAL
 SELECT NOMBRE FROM FUTBOLISTAS WHERE NOMBRE LIKE '%E'; -- % QUE TERMINE EN E
 
--- OPERADORES Y OPERACIÓN
+/*Ejercicio 6
+? Obtén el nombre de los futbolistas que cobran más de 150.000 euros (SALARIO).
+? Muestra el ID de los futbolistas cuyo apellido sea GÓMEZ.
+? Indica los apellidos de los futbolistas que empiezan por G.
+? Devuelve todos los datos de los futbolistas cuya posición sea DEFENSA o DELANTERO.
+? Obtén el nombre de los futbolistas que cobran entre 100.000 y 200.000 euros (SALARIO). */
+SELECT NOMBRE FROM FUTBOLISTAS WHERE SALARIO > 150000;
+SELECT ID FROM FUTBOLISTAS WHERE APELLIDOS = 'GOMEZ';
+SELECT ID FROM FUTBOLISTAS WHERE APELLIDOS LIKE 'G%';
 
 
 
