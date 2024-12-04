@@ -153,7 +153,77 @@ CREATE TABLE FECHAS_CAPTURAS(
     PRIMARY KEY( COD_ESPECIE, COD_CALADERO )
 );
 
+--04 / 12 / 2024
+-- 2.PDF EJERCICIOS  02
+drop table socios cascade constraints;
+create table socios(
+    codigo_socio CHAR(8) PRIMARY KEY CHECK(REGEXP_LIKE(codigo_socio,'S[0-9]{5}24')),
+    dni CHAR(9) CHECK(REGEXP_LIKE(dni,'[0-9]{8}[A-Z]')),
+    nombre varchar(100),
+    apellidos varchar(200) ,
+    direccion varchar(300),
+    telefono number(9)
+);
+drop table libros cascade constraints;
+create table libros(
+    isbn CHAR(17) CHECK(REGEXP_LIKE(isbn,'[0-9]{13}[A-Z]{4}')) PRIMARY KEY,
+    titulo VARCHAR(200),
+    editorial VARCHAR(50),
+    ano_publicacion INT,
+    autores VARCHAR(300),
+    ano INT,
+    edicion INT,
+    deteriorado CHAR(2) CHECK(deteriorado in ('Si','No'))
+    --otro ejemplo deteriorado char(2) check(deteriorado = 'Si' or deteriorado = 'No')
+);
+drop table prestamos cascade constraints;
+create table prestamos(
+    codigo_socio CHAR(8) CHECK(REGEXP_LIKE(codigo_socio,'S[0-9]{5}24')),
+    isbn CHAR(17) CHECK(REGEXP_LIKE(isbn,'[0-9]{13}[A-Z]{4}')),
+    fecha_prestamo DATE,
+    fecha_devolucion DATE,
+    fecha_real_devolucion DATE,
+    --AHORA CREO LA PK COMPUESTA Y DESP LA FK DE CADA UNA
+    PRIMARY KEY(codigo_socio,isbn),
+    FOREIGN KEY(codigo_socio) references socios(codigo_socio) on delete set null, --on delete set null: Si se borran registros del que dependen los campos FK deben modificarse dichas columnas a NULL.
+    FOREIGN KEY(isbn) references libros(isbn) on delete set null, --on delete set null: Si se borran registros del que dependen los campos FK deben modificarse dichas columnas a NULL.
+    --La fecha de devolución tiene que ser mayor que la fecha de préstamo exactamente en 15 días.
+    CHECK(fecha_devolucion > fecha_prestamo+15),
+    CHECK(fecha_real_devolucion >= fecha_prestamo)
+);
+--2. Crea un par de socios
+insert into socios values ('S0000024','12345678X','Nombre','Apellidos','Dirección',123456789);
+insert into socios values ('S1111124','11145678X','Socio 2','Apellidos','Dirección',123456711);
+select * from socios;
+--3
+insert into libros values ('0000000000000AAAA','Libro 1','Editorial',1995,'Autor 1',1998,4,'No');
+insert into libros values ('0000000000011BBAA','Libro 2','Editorial',2015,'Autor 2',2015,1,'Si');
+insert into libros values ('0000000000022CCAA','Libro 3','Editorial 3',2010,'Autor 1',2011,2,'No');
+select * from libros;
+--4
+ALTER SESSION SET nls_date_format='DD/MM/YYYY';
+insert into prestamos values ('S0000024','0000000000000AAAA','01/11/2024','17/11/2024','18/11/2024');
+insert into prestamos values ('S0000024','0000000000011BBAA','01/12/2024','17/12/2024','16/12/2024');
+--Otros ejercicios
+--1
+insert into prestamos values ('S1111124','0000000000011BBAA','17/12/2024','02/01/2025','02/01/2025');
+--2
+update socios set nombre='Socio 1', apellidos='AP1' where codigo_socio = 'S0000024';
+update socios set nombre='Socio 2 new', apellidos='AP2' where codigo_socio = 'S1111124';
+select * from socios;
+--3
+update libros set edicion = 2018;
+select * from libros;
+--no pongo where porque me dicen todos
+--4
+select * from libros;
+update libros set deteriorado = 'Si' where isbn = '0000000000000AAAA';
 
+select deteriorado from libros;
+select distinct deteriorado from libros;
+select * from prestamos;
+select * from libros,prestamos where libros.isbn = prestamos.isbn;
+select * from libros where autores = 'Autor 1';
+select * from libros 
 
-    
 
