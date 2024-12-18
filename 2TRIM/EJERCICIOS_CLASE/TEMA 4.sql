@@ -125,6 +125,82 @@ SELECT NOMBRE FROM FUTBOLISTAS WHERE SALARIO > 150000;
 SELECT ID FROM FUTBOLISTAS WHERE APELLIDOS = 'GOMEZ';
 SELECT ID FROM FUTBOLISTAS WHERE APELLIDOS LIKE 'G%';
 
+--ejercicio 6
+select nombre from futbolistas where salario > 150000;
+select id from futbolistas where apellidos = 'GOMEZ';
+select apellidos from futbolistas where apellidos like 'G%';
+select * from futbolistas where posicion = 'DEFENSA' or posicion = 'DELANTERO';
+select * from futbolistas where posicion in ('DEFENSA','POSICION');
+select nombre from futbolistas where salario between 100000 and 200000;
+select nombre from futbolistas where salario > 100000 and salario < 200000;
+select 4*5+2 from dual;
+--SEGUIMOS POR LA TRANSPARENCIA 37
+
+--5/12/2024
+
+--Ejercicio 7
+select nombre,apellidos "Apellidos",salario*1.10 "Nuevo salario" from futbolistas where posicion = 'PORTERO'order by apellidos;
+ALTER SESSION SET nls_date_format='DD/MM/YYYY';
+select 'hola' || sysdate from dual;
+select 'La posición del futbolista ' || nombre || ' es ' || posicion "Descripción de los futbolistas" from futbolistas;
+--Función concat(cad1,cad2) --> cad1cad2
+select concat('hola',sysdate) from dual;
+--Ejercicio 8
+select nombre || ' es ' || posicion "Posiciones" from futbolistas;
+ 
+select futbolistas.nombre || ' juega en ' || equipos.nombre from futbolistas,equipos where id_equipo = equipos.id;
+--multitabla
+--join
+--subconsultas
+ 
+--Ejercicio 9
+select * from futbolistas where (salario > 150000) and (posicion = 'DEFENSA');
+select * from futbolistas where (posicion = 'DEFENSA') and (salario > 150000);
+ 
+--Ejercicio 11
+select upper(lower(nombre)),salario,salario*1.5 || ' euros' "Salario bruto"	from futbolistas;
+select concat(concat(id,' '),concat(nombre || ' ',apellidos)) "Ejemplo concat" from futbolistas;
+
+select  nombre,salario,salario*1.5 || ' euros' "Salario Bruto" from futbolistas;
+
+--18/12/2024 transaparencia 54
+select upper(substr('hola',1,1))||'ola' from dual;
+select initcap('hola') from dual;
+--CONCAT() ||
+select concat(concat(concat(concat(concat('1','.'),' '),'soy'),' '),'groot') from dual;
+--1. Soy groot
+select ceil(11) from dual;
+select ceil(11.9) from dual;
+select ceil(11.1) from dual;
+select floor(11) from dual;
+select floor(11.9) from dual;
+select floor(11.1) from dual;
+select mod(10,6) from dual; 
+--10 / 6 = 1 _ 4
+select power(10,2) from dual;
+select round(17.5) from dual;
+select round(17.4) from dual;
+select round(17.4346,-1) from dual;
+select sign(-5) from dual;
+
+/*Ejercicio 12
+Realiza las siguientes operaciones utilizando funciones numéricas:
+1. Calcula el valor absoluto de -10.
+2. Obtén el exponente en base e de 4.
+3. Redondea el número 15,3 a 16.
+4. Redondea el número anterior (15,3) a 15.
+5. Calcula el resto de 15 entre 3 (15/3).
+6. Eleva 15 al exponente 2 (152). */
+
+select abs(-10) from dual;
+select exp(4) from dual;
+select ceil(15.3) from dual;
+select round(15.3) from dual;
+select ceil(15.3) from dual;
+
+
+
+
 
 
 
