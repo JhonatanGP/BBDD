@@ -199,9 +199,64 @@ select round(15.3) from dual;
 select ceil(15.3) from dual;
 
 
+--  2 TRIMESTRE 8 DE ENERO 2025
 
+/* DIAPOSITIVA 71. REPLACE(CADENA,ANT,NUEVA). Devuelve cadena donde se ha sustituido la aparición de 
+ant por la cadena nue en todos los casos */
 
+--SUSTITUIR LA LETRA O POR * EN LOS NOMBRES ANTERIORES
+SELECT REPLACE(NOMBRE,'O','*') "NOMBRE" FROM FUTBOLISTAS;
 
+-- QUIERO QUE LA QUERY ANTERIOR SEA INSENSIBLE A MAYUS Y MINUS
+SELECT REPLACE(LOWER(NOMBRE),'o','*') "NOMBRE" FROM FUTBOLISTAS;
+SELECT REPLACE(REPLACE(NOMBRE,'o','*'),'O','*') "NOMBRE" FROM FUTBOLISTAS;
 
+select * from futbolistas where posicion = 'DEFENSA' and nombre like 'P%' order by nombre desc;
+--Sustituir la letra O por * en los nombres anteriores Y sea insensible a mayúsculas y minúsculas
+select id,replace(replace(nombre,'o','*'),'O','*') "NOMBRE",apellidos,fecha_nacimiento,posicion,salario,id_equipo
+    from futbolistas where posicion = 'DEFENSA' and nombre like 'P%' order by nombre desc;
+    
+/*Primero inserta un nuevo futbolista con los siguientes datos:
+ID: F80120
+NOMBRE: MIGUEL
+APELLIDOS: GARCIA
+FECHA_NACIMIENTO: 22/02/1980
+POSICION: DEFENSA
+SALARIO: 350000
+ID_EQUIPO: 1 */
+-- PRIMERO COMPROBAMOS QUE NO HAY USUARIO CON ES ID.
+SELECT * FROM FUTBOLISTAS WHERE ID = 'F80120';
+INSERT INTO FUTBOLISTAS VALUES('F80120','MIGUEL','GARCIA','22/02/1980','DEFENSA',350000,1);
 
+-- CAMBIAR EL NOMBRE DE MIGUEL A MINUS
+UPDATE FUTBOLISTAS SET  NOMBRE = 'miguel' where id = 'F80120';
+SELECT ID,REPLACE(REPLACE(NOMBRE,'E','*'),'e','*') "NOMBRE",APELLIDOS,FECHA_NACIMIENTO,POSICION,SALARIO,ID_EQUIPO
+FROM FUTBOLISTAS WHERE POSICION = 'DEFENSA' ORDER BY NOMBRE DESC;
+
+-- QUIERO QUEDARME EL PRIMER NOMBRE DE LOS FUTBOLISTAS
+SELECT SUBSTR(NOMBRE,1,3) FROM futbolistas;
+SELECT SUBSTR(NOMBRE,2) FROM futbolistas;
+UPDATE FUTBOLISTAS SET  NOMBRE = ' miguel   ' where id = 'F80120';
+SELECT NOMBRE,LENGTH(NOMBRE) FROM futbolistas;
+SELECT NOMBRE,LENGTH(NOMBRE),TRIM(NOMBRE),LENGTH(TRIM(NOMBRE)) FROM futbolistas;
+SELECT NOMBRE,REPLACE(NOMBRE,' ','') FROM futbolistas;
+SELECT REPLACE(NOMBRE,' ','$') FROM futbolistas;
+--INSTR
+SELECT NOMBRE,INSTR(NOMBRE,' ') FROM FUTBOLISTAS;
+SELECT NOMBRE,INSTR(NOMBRE,' '),INSTR(NOMBRE,' ',1,2) FROM FUTBOLISTAS;
+SELECT NOMBRE,INSTR(NOMBRE,' '),INSTR(NOMBRE,' ',1,2),INSTR(NOMBRE,' ',2,2) FROM FUTBOLISTAS;
+--SOLUCION
+SELECT NOMBRE FROM FUTBOLISTAS;
+select trim(substr(nombre,1,instr(nombre,' '))) from futbolistas where id = 'F00220';
+SELECT SUBSTR(nombre, 1, INSTR(nombre, ' ') - 1)  FROM futbolistas;
+select substr(nombre,1,(instr(nombre||' ',' '))) from futbolistas;
+select substr(TRIM(nombre),1,(instr(TRIM(nombre)||' ',' '))) from futbolistas;
+
+-- FECHAS
+SELECT SYSDATE FROM DUAL;
+SELECT SYSTIMESTAMP FROM DUAL;
+SELECT NEXT_DAY(SYSDATE,'JUEVES') FROM DUAL;
+SELECT EXTRACT(MONTH FROM SYSDATE) FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'MONTH') FROM DUAL;
+SELECT TO_CHAR(TO_DATE('25/12/2024'),'MONTH') FROM DUAL;
 
