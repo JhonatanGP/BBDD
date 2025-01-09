@@ -260,3 +260,70 @@ SELECT EXTRACT(MONTH FROM SYSDATE) FROM DUAL;
 SELECT TO_CHAR(SYSDATE,'MONTH') FROM DUAL;
 SELECT TO_CHAR(TO_DATE('25/12/2024'),'MONTH') FROM DUAL;
 
+--EJERCICIO 15(PAG 86)
+--1. Obtén en tres columnas independientes, el día,el mes y la fecha de hoy.
+SELECT EXTRACT(DAY FROM SYSDATE) AS DIA, EXTRACT(MONTH FROM SYSDATE)AS MES, EXTRACT(YEAR FROM SYSDATE)AS AÑO FROM DUAL;
+--TO_CHAR(), TO_DATE(), TO_NUMBER()
+select to_char(sysdate,'month'),to_char(sysdate,'dd'),to_char(sysdate,'mm'),sysdate from dual;
+select to_char(to_date('09/01/2025'),'day') from dual;
+select '10' + 1 from dual;
+select to_number('10') + 1 from dual;
+--2. Muestra por pantalla la fecha que será dentro de 6 meses utilizando ADD_MONTHS.
+SELECT ADD_MONTHS(SYSDATE,6) FROM DUAL;
+--3. Muestra el número de meses que hay entre hoy y la fecha de nacimiento de todos los futbolistas.
+SELECT FLOOR(MONTHS_BETWEEN(SYSDATE,FECHA_NACIMIENTO))"MESES" FROM FUTBOLISTAS;
+--4. ¿Cuál es el último día de este mes? Muéstralo.
+SELECT LAST_DAY(SYSDATE) FROM DUAL;
+--5. ¿Qué día será el próximo lunes? Ponlo por pantalla mediante una petición.
+SELECT NEXT_DAY(SYSDATE,'LUNES') FROM DUAL;
+--6. Muestra el día que era hace 4 días. ¿Y el día de mañana?
+SELECT SYSDATE-4 FROM DUAL;
+SELECT SYSDATE+1 FROM DUAL;
+
+--Quiero saber cuántos años se llevan PEDRO LUIS y JESUS. Resultado: 10
+SELECT * FROM FUTBOLISTAS;
+SELECT CEIL(MONTHS_BETWEEN((SELECT FECHA_NACIMIENTO FROM FUTBOLISTAS WHERE NOMBRE = 'JESUS'),(SELECT FECHA_NACIMIENTO FROM FUTBOLISTAS WHERE NOMBRE = 'PEDRO LUIS')))/12 FROM DUAL;
+SELECT CEIL(MONTHS_BETWEEN((SELECT FECHA_NACIMIENTO FROM FUTBOLISTAS WHERE NOMBRE = 'JESUS'),(SELECT FECHA_NACIMIENTO FROM FUTBOLISTAS WHERE NOMBRE = 'PEDRO LUIS'))/12) FROM DUAL;
+
+-- EJEMPLOS TO NUMBER()
+SELECT '1000€'-'20€' FROM DUAL; -- NO SE PUEDE
+SELECT TO_NUMBER('$1000','$9999') FROM DUAL;
+SELECT TO_NUMBER('1000€','9999L')-TO_NUMBER('20€','99L') AS "PRECIO" FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'MI DAY MONTH') FROM DUAL;
+SELECT TRIM(TO_CHAR(SYSDATE,'MI DAY MONTH')) FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'MI')|| TRIM(TO_CHAR(SYSDATE,'MI'))|| FROM DUAL;
+
+--Ejemplos to_number()
+select trim(to_char(sysdate,'MI DAY:MONTH')) from dual;
+select 
+    to_char(sysdate,'MI') || 
+    ' ' ||
+    trim(to_char(sysdate,'DAY')) || 
+    ':' || 
+    trim(to_char(sysdate,'MONTH'))from dual;
+select '09/01/2025' from dual;
+select to_date('09/01/2025') from dual;
+/* RESUMEN
+TO_NUMBER('CADENA','MASCARA') -> NUMERO
+TO_CHAR('FECHA','MASCARA') -> CHAR CON DATOS DE UNA FECHA
+TO_DATE('CADENA') -> FECHA */
+
+--EJERCICIO 16
+--1. Convierte ‘1000.45’ a un número.
+SELECT TO_NUMBER('1000.45','9999.99') FROM DUAL;
+--2. Convierte ‘1000.45€’ a un número.
+SELECT TO_NUMBER('1000.45€','9999.99L') FROM DUAL;
+--3. Convierte ‘-$1000.45’ a un número.
+SELECT TO_NUMBER('-$1000.45','S$9999.99') FROM DUAL;
+--4. Muestra el día de hoy con los siguientes formatos:  12/02/2021, 12/02/21, 12-feb-2021, 12 de febrero de 2021
+SELECT TO_CHAR(SYSDATE,'DD/MM/YYYY') FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'DD/MM/YY') FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'DD-MON-YYYY') FROM DUAL;
+SELECT TO_CHAR(SYSDATE,'DD')||'DE'||'MONTH') FROM DUAL;
+SELECT TO_CHAR(SYSDATE, 'DD') || ' de ' || TRIM(TO_CHAR(SYSDATE,'MONTH'))||' DE ' TO_CHAR(SYSDATE,'YYYY') FROM DUAL;
+REPLACE(TO_CHAR(SYSDATE, 'month'),' ','') || ' de ' ||
+TO_CHAR(SYSDATE, 'YYYY') FROM DUAL;
+--5. Convierte el ID de la tabla FUTBOLISTAS en un número de tres cifras.
+
+--6. Muestra todos los años de nacimiento de los futbolistas (solo el año, ej.: 1990, 1991, etc.). Ordénalos de menor a mayor año.
+
