@@ -3,10 +3,11 @@ SELECT * FROM DEPT;
 SELECT LOWER(DNAME) FROM DEPT;
 --2. Seleccionar todos los datos de la tabla empleados (todas las columnas).
 SELECT * FROM EMP;
---3. Devuelve ename, job, sal y comm de los empleando usando los siguientes alias de columnas: nombre, puesto, salario y comisi贸n.
-
---4. Calcula cu醤tas semanas completas (de lunes a domingo) ha trabajado cada empleado, y devuelve dicho valor y el nombre del empleado.
-
+--3. Devuelve ename, job, sal y comm de los empleando usando los siguientes alias de columnas: nombre, puesto, salario y comisi髇.
+SELECT ENAME "NOMBRE",JOB "PUESTO",SAL "SALARIO",COMM "COMISI覰" FROM EMP;
+--4. Calcula cu醤tas semanas completas(de lunes a domingo) ha trabajado cada empleado, y devuelve dicho valor y el nombre del empleado.
+SELECT * FROM EMP;
+SELECT ENAME,CEIL((SYSDATE-HIREDATE)/7) "SEMANAS" FROM EMP;
 --5. Calcular el sueldo neto de cada empleado, y la retencion iRPF mensual, sabiendo que la retenci贸n es del 19% para el sueldo y de un 10% de la comisi贸n, (redondear a 2 decimales). Si el empleado no tiene comisi贸n, se debe mostrar el valor 0.
 
 --6. Hacer un listado de empleados (nombre y salario) con sueldo superior a 1000.
