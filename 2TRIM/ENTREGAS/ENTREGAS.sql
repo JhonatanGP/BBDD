@@ -8,26 +8,26 @@ SELECT ENAME "NOMBRE",JOB "PUESTO",SAL "SALARIO",COMM "COMISI覰" FROM EMP;
 --4. Calcula cu醤tas semanas completas(de lunes a domingo) ha trabajado cada empleado, y devuelve dicho valor y el nombre del empleado.
 SELECT * FROM EMP;
 SELECT ENAME,CEIL((SYSDATE-HIREDATE)/7) "SEMANAS" FROM EMP;
---5. Calcular el sueldo neto de cada empleado, y la retencion iRPF mensual, sabiendo que la retenci贸n es del 19% para el sueldo y de un 10% de la comisi贸n, (redondear a 2 decimales). Si el empleado no tiene comisi贸n, se debe mostrar el valor 0.
-
+--5. Calcula sueldo neto de cada empleado, la retencion IRPF mensual, sabiendo que la retenci髇 es 19% para el sueldo y 10% de la comisi髇, (redondear a 2 decimales). Si el empleado no tiene comisi贸n, se debe mostrar el valor 0.
+SELECT SAL "NETO", ROUND((SAL*0.19) + (NVL(COMM,0)*0.1),2) "IRPF" FROM EMP;--NVL A LOS COMM QUE ESTEN EN NULL SE LES PONE 0
 --6. Hacer un listado de empleados (nombre y salario) con sueldo superior a 1000.
-
+SELECT ENAME,SAL FROM EMP WHERE SAL > 1000;
 --7. Hacer un listado de empleados (nombre, puesto, sueldo, comision) que tengan puesto igual a CLERK.
-
+SELECT ENAME,JOB,SAL,COMM FROM EMP WHERE JOB = 'CLERK';
 --8. Hacer un listado de empleados (nombre, puesto, sueldo, comision) que tengan puesto distinto a CLERK.
-
+SELECT ENAME,JOB,SAL,COMM FROM EMP WHERE JOB != 'CLERK';
 --9. Hacer un listado de empleados (nombre, puesto, sueldo, comision) que tengan puesto distinto a CLERK y sueldo superior a 1500.
-
+SELECT ENAME,JOB,SAL,COMM FROM EMP WHERE JOB != 'CLERK' AND SAL > 1500;
 --10. Hacer un listado de empleados (nombre, puesto, sueldo, comision) que tengan asignada comisi贸n.
-
+SELECT ENAME,JOB,SAL,COMM FROM EMP WHERE COMM IS NOT NULL;
 --11. Hacer un listado de empleados (nombre, puesto, sueldo, comision) que NO tengan asignada comisi贸n.
-
+SELECT ENAME,JOB,SAL,COMM FROM EMP WHERE COMM IS NULL;
 --12. Seleccionar los empleados cuyo nombre empieza por 'A'.
-
+SELECT ENAME FROM EMP WHERE ENAME LIKE 'A%';
 --13. Seleccionar los empleados cuyo nombre tienen una A en cualquier posici贸n.
-
+SELECT ENAME FROM EMP WHERE ENAME LIKE '%A%';
 --14. Seleccionar los empleados cuyo nombre no contiene ninguna 'A'.
-
+SELECT ENAME FROM EMP WHERE ENAME LIKE 'A%';
 --15. Seleccionar los empleados cuyo nombre empieza por una vocal.
 
 --16. Seleccionar los empleados con sueldo entre 1000 y 2000 (ambos inclusive).
