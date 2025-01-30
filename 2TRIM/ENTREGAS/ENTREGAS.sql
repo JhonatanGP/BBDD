@@ -29,7 +29,9 @@ SELECT ENAME FROM EMP WHERE ENAME LIKE '%A%';
 --14. Seleccionar los empleados cuyo nombre no contiene ninguna 'A'.
 SELECT ENAME FROM EMP WHERE ENAME LIKE 'A%';
 --15. Seleccionar los empleados cuyo nombre empieza por una vocal.
-
+SELECT ENAME FROM EMP WHERE SUBSTR(ENAME,1,1) IN ('A','E','I','O','U');
+SELECT * FROM EMP WHERE SUBSTR(ENAME,1,1) IN ('A','E','I','O','U');
+select * from emp where ename like ('A%') or ename like ('E%') or ename like ('I%') or ename like ('O%') or ename like ('U%');
 --16. Seleccionar los empleados con sueldo entre 1000 y 2000 (ambos inclusive).
 
 --17. Seleccionar los empleados con sueldo igual a 1000, 2000, 3000, 4000 o 5000.

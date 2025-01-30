@@ -280,11 +280,11 @@ Realiza las siguientes consultas.
 
 1. Indica por cada nacionalidad de los pilotos, el número de estos que hay. Ordena el resultado por el número de estos de mayor a menor, 
    y en caso de que empate, por nacionalidad en orden alfabético.
-2. Indica en una única columna con el siguiente formato (APELLIDOS, NOMBRE - NOMBRE_EQUIPO ) aquellos pilotos que tenga rol PRIMER PILOTO.
-3. Muestra el nombre del motor y la suma de títulos que se ha conseguido con ese motor actualmente. Ej.: MERCEDES, 9; HONDA 6; FERRARI 16.
-4. ¿Cuántos pilotos han nacido en día impar?
-5. Muestra el nombre, apellidos de los pilotos, además del nombre del director de su equipo y el rol que ocupa dicho piloto actualmente.
-6. ¿Cuántas vocales tiene el apellido del piloto que está en el equipo que tiene más empleados?
+. Indica en una única columna con el siguiente formato (APELLIDOS, NOMBRE - NOMBRE_EQUIPO ) aquellos pilotos que tenga rol PRIMER PILOTO.
+. Muestra el nombre del motor y la suma de títulos que se ha conseguido con ese motor actualmente. Ej.: MERCEDES, 9; HONDA 6; FERRARI 6.
+. ¿Cuántos pilotos han nacido en día impar?
+. Muestra el nombre, apellidos de los pilotos, además del nombre del director de su equipo y el rol que ocupa dicho piloto actualmente.
+. ¿Cuántas vocales tiene el apellido del piloto que está en el equipo que tiene más empleados?
 
 ## Parte 3
 
@@ -325,8 +325,7 @@ create table roles(
 );
 alter table pilotos
 add foreign key(id_rol) references roles;
-alter table pilotos
-add foreign key(id_equipo) references equipos;
+alter table pilotos add foreign key(id_equipo) references equipos;
  
 insert into equipos values (1,'ASTON MARTIN','SILVERSTONE','ADRIAN NEWEY','MERCEDES',0,800);
 insert into equipos values (2,'RED BULL','MILTON KEYNES','CHRISTIAN HORNER','HONDA',6,1000);
@@ -364,7 +363,7 @@ insert into piloto  values (4, 'CARLOS','SAINZ','01/09/1994', 'ESPAÑOLA', 1, 4);
 insert into equipo  values (1, 'ASTON MARTIN','SILVERSTONE','ADRIAN NEWEY', 'MERCEDES', 0, 800);
 insert into equipo values (2, 'RED BULL','MILTON KEYNES','CHRISTIAN HORNER', 'HONDA', 6, 1000);
 insert into equipo  values (3, 'FERRARI','MARANELLO','JOHN ELKANN', 'FERRARI', 16, 1200);
-insert into equipo  values (4, 'WILLIAMS','GROVE','JAMES VOWLES', 'MERCEDES', 9, 750)
+insert into equipo  values (4, 'WILLIAMS','GROVE','JAMES VOWLES', 'MERCEDES', 9, 750);
  
 create table equipo(
     id int primary key,
@@ -394,6 +393,7 @@ alter table piloto add foreign key (id_equipo) references equipo (id);
 alter table piloto add check (nacionalidad = 'ESPAÑOLA' or nacionalidad = 'HOLANDESA' or nacionalidad = 'BRITÁNICA');
 alter table equipo add check (num_empleados > 0);
 
+-- PARTE 2
 --1. Indica por cada nacionalidad de los pilotos, el número de estos que hay. Ordena el resultado por el número de estos de mayor a menor, 
 --   y en caso de que empate, por nacionalidad en orden alfabético.
 select * from piloto;
@@ -407,11 +407,108 @@ select piloto.apellidos,piloto.nombre,equipo.nombre,rol.rol
     join rol on piloto.id_equipo = rol.id where rol.rol = 'primer piloto';
 
 --3. Muestra el nombre del motor y la suma de títulos que se ha conseguido con ese motor actualmente. Ej.: MERCEDES, 9; HONDA 6; FERRARI 16.
-
+SELECT MOTOR,SUM(NUM_TITULOS)"TITULOS" FROM EQUIPO GROUP BY MOTOR ORDER BY SUM(NUM_TITULOS) DESC;
+--4. ¿Cuántos pilotos han nacido en día impar?
+select NOMBRE,to_char(fecha_nacimiento,'"    "DD') " DIA IMPAR" from piloto where mod(to_char(fecha_nacimiento,'DD'),2) != 0;// EL MOD CALCULA
+--EL RESTO DE LA DIV DEL DIA QUE ES 30/2, != 0 IMPRIME LOS IMPAR 
 --5. Muestra el nombre, apellidos de los pilotos, además del nombre del director de su equipo y el rol que ocupa dicho piloto actualmente.
-
+select * from piloto;
+select * from equipo;
+select * from rol;
+SELECT PILOTO.NOMBRE,PILOTO.APELLIDOS,EQUIPO.DIRECTOR,ROL.ROL FROM PILOTO JOIN EQUIPO ON piloto.id_equipo = EQUIPO.ID
+    JOIN ROL ON piloto.id_rol = ROL.ID;
 --6. ¿Cuántas vocales tiene el apellido del piloto que está en el equipo que tiene más empleados?
+SELECT APELLIDOS FROM PILOTO WHERE NUM_EMPLEADOS=(SELECT MAX(NUM_EMPLEADO) FROM PILOTO); //FALTA JOIN
 
 
- 
+// JUEVES 30 DE ENERO DE 2025
+/*Ejercicio 6
+Crea un bloque de código anónimo que requiera por pantalla un nombre, luego un apellido y muestre como resultado “Hola nombre apellido”.*/
+set serveroutput on;
+declare
+    nombre varchar2(50) := '&NOMBRE';
+    apellidos varchar2(50) := '&APELLIDOS';
+begin
+    dbms_output.put_line('Hola,' || ' ' ||nombre || ' ' || apellidos);
+end;
+/
+
+/*Ejercicio 7
+Crea un programa que realiza la suma, resta, multiplicación y división de dos números enteros, num1 y num2 (8 y 4). */
+declare
+    N1 INT := 8;
+    N2 INT := 4;
+    TOTAL_SUMA INT ;
+    TOTAL_RESTA INT := N1-N2;
+begin
+    total_suma := N1+N2;
+    dbms_output.put_line(TOTAL_SUMA);
+    dbms_output.put_line(TOTAL_RESTA);
+    dbms_output.put_line(N1*N2);
+    dbms_output.put_line(N1/N2);
+end;
+/
+
+SELECT TO_CHAR(SYSDATE,'DD/MM/YYYY "DEL" MONTH') FROM DUAL;
+--FUNCIONES AGRUPAMIENTO
+-- COUNT() MIN(), MAX(), SUM(), AVG() -> DEVULVEN UN VALOR
+SELECT * FROM EMP;
+SELECT COUNT (*) FROM EMP;
+SELECT MIN(SAL),MAX(SAL) FROM EMP;
+SELECT SUM(SAL) FROM EMP;
+SELECT AVG(COMM) FROM EMP;
+
+SELECT JOB,COUNT(*) FROM EMP GROUP BY JOB;
+SELECT TRIM(TO_CHAR(SYSDATE,'MONTH')) FROM DUAL;
+SELECT TRIM(TO_CHAR(SYSDATE,'MONTH')) || TO_CHAR(SYSDATE,'DD') FROM DUAL;
+
+--Estructuras de control
+/*
+if condición/es then
+elsif nuevacondición/es then
+else
+end if;
+*/
+declare
+    num1 int := 14;
+    num2 int := 14;
+    total_suma int;
+    total_resta int := num1 - num2;
+begin
+    total_suma := num1 + num2;
+    dbms_output.put_line(total_suma);
+    if total_resta < 0 then
+        dbms_output.put_line('Es negativo');
+    elsif total_resta = 0 then
+        dbms_output.put_line('Son iguales');
+    else
+        dbms_output.put_line(total_resta);
+    end if;
+    dbms_output.put_line(num1*num2);
+    dbms_output.put_line(num1/num2);
+end;
+/
+--EJERCICIO INDA
+/*PIDE AL USUARIO DETNO, DNAME Y LOC Y METE ESOS VALORES CON UN INSERT IN INTO EN LA TABLA DEPT. EJ: 50,MARKETING,SEVILLA*/
+DECLARE 
+    N_DEPT DEPT.DEPTNO%TYPE := &N_DEPT;
+    NAME_DEPT DEPT.DNAME%TYPE := '&NAME_DEPT';
+    LOC_DEPT DEPT.LOC%TYPE := '&LOC_DEPT';
+BEGIN
+    INSERT INTO DEPT VALUES (N_DEPT,NAME_DEPT,LOC_DEPT);
+    dbms_output.put_line('FILA INSERTADA CORRECTAMENTE:' || N_DEPT ||'-'||NAME_DEPT || '-' || LOC_DEPT);
+
+END;
+/
+--Ejemplo: 50, MARKETING, SEVILLA
+DECLARE
+    NUMDEPARTAMENTO DEPT.DEPTNO%TYPE := &NUMDEPARTAMENTO;
+    NOMBREDEPARTAMENTO DEPT.DNAME%TYPE := '&NOMBREDEPARTAMENTO';
+    LOCALIZACIONDEPARTAMENTO DEPT.LOC%TYPE := '&LOCALIZACIONDEPARTAMENTO';
+BEGIN
+    INSERT INTO DEPT VALUES (NUMDEPARTAMENTO,NOMBREDEPARTAMENTO,LOCALIZACIONDEPARTAMENTO);
+    DBMS_OUTPUT.PUT_LINE('FILA INSERTADA CORRECTAMENTE: ' || NUMDEPARTAMENTO || '-' || NOMBREDEPARTAMENTO || '-' || LOCALIZACIONDEPARTAMENTO);
+END;
+/
+
 
