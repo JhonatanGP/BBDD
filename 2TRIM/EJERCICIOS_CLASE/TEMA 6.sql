@@ -418,9 +418,36 @@ select * from rol;
 SELECT PILOTO.NOMBRE,PILOTO.APELLIDOS,EQUIPO.DIRECTOR,ROL.ROL FROM PILOTO JOIN EQUIPO ON piloto.id_equipo = EQUIPO.ID
     JOIN ROL ON piloto.id_rol = ROL.ID;
 --6. ¿Cuántas vocales tiene el apellido del piloto que está en el equipo que tiene más empleados?
-SELECT APELLIDOS FROM PILOTO WHERE NUM_EMPLEADOS=(SELECT MAX(NUM_EMPLEADO) FROM PILOTO); //FALTA JOIN
+select 
+    length(apellidos) - length(replace(replace(replace(replace(replace(apellidos,'A',''),'E',''),'I',''),'O',''),'U','')) "Núm. Vocales"
+        from piloto
+          join equipo on equipo.id =  piloto.id_equipo
+               where num_empleados = (select max(num_empleados) from equipo);
 
+/*## Parte 3
+Realiza un bloque de código anónimo que haga lo siguiente.
 
+1. Realiza llamadas a la tabla equipos y guarda dichos resultados en variables con SELECT INTO.
+2. Debes emplear el tipo de datos de los campos de la tabla equipos para tus variables.
+3. Debes mostrar un primer mensaje por la salida indicando: "El número total de campeonatos disputados es de XXX", donde XXX debe ser el  
+   número sumatorio de títulos obtenidos por los equipos guardados en la tabla equipos.
+4. Debes mostrar un segundo mensaje por la salida indicando: "El motor más empleado es XXX con un total de YYY equipos que lo usan", 
+   donde XXX es el nombre del motor que se emplea más veces, e YYY el número de equipos que usan ese motor más usado.*/
+
+set serveroutput on;
+declare
+    totalCampDisp equipo.num_titulos%type;
+    motorMasEmpleado equipo.motor%type;
+    numEqUsanMotor int;
+begin
+    select sum(num_titulos) into totalCampDisp from equipo;
+    dbms_output.put_line('El número total de campeonatos disputados es de ' || totalCampDisp );
+    select motor into motorMasEmpleado from equipo group by motor having count(motor) = (select max(count(motor)) from equipo group by motor);
+    select max(count(motor)) into numEqUsanMotor from equipo group by motor;
+    dbms_output.put_line('El motor más empleado es ' || motorMasEmpleado ||' con un total de '|| numEqUsanMotor ||' equipos que lo usan ' || totalCampDisp );
+end;
+/
+select motor,count(motor) from equipo group by motor having count(motor) = (select max(count(motor)) from equipo group by motor);
 // JUEVES 30 DE ENERO DE 2025
 /*Ejercicio 6
 Crea un bloque de código anónimo que requiera por pantalla un nombre, luego un apellido y muestre como resultado “Hola nombre apellido”.*/
@@ -697,5 +724,138 @@ begin
     else
         dbms_output.put_line('El resultado del partido ha sido empate');
     end case;
+end;
+/
+
+// ## JUEVES 6 DE FEBRERO DE 2025
+// PAG 47 PDF1 CONSTRUCCION DE GUIONES
+
+DECLARE 
+     NUM1 INT := 2;
+BEGIN
+    LOOP
+        dbms_output.put_line(NUM1);
+        IF NUM1 = 0 THEN -- 1 FORMA
+            EXIT;
+        END IF;
+        EXIT WHEN NUM1 = 1; -- 2 FORMA
+        -- NUM1--
+        -- NUM2++
+        NUM1 := NUM1 -2;
+    END LOOP;
+END;
+/
+--BUCLES
+set serveroutput on;
+declare
+    i int := 0;
+begin
+    loop 
+        if i <= 10 then
+    dbms_output.put_line(i);
+    elsif i = 11 then
+        exit;
+        end if;
+        i := i+1; --i++ no, i+=1
+    end loop;
+end;
+/
+--otro ejemplo
+declare
+    i int := 0;
+begin
+    loop 
+        dbms_output.put_line(i);
+        i := i+1;
+        exit when i >=1;
+    end loop;
+end;
+/
+--Ejercicio 13
+/*Realiza un programa que ejecute un bucle LOOP y se salga con un EXIT WHEN. Para ello crea una variable entero inicializada a 0 y que se vaya
+incrementando en el bucle, además de mostrar por pantalla su valor; la condición de salida será cuando dicha variable valga más de 20.*/
+declare
+    num1 int := 0;
+begin
+    loop 
+        dbms_output.put_line(num1);
+        num1 := num1+1; --me lo suma segun ponga el numero
+        exit when num1 >= 20;
+    end loop;
+end;
+/
+--Ejercicio 14. Realiza un programa que haga lo indicado en el ejercicio 13 pero que se salga mediante un IF condición THEN EXIT.
+declare
+    var1 int := 0;
+begin   
+    loop
+        dbms_output.put_line(var1);
+        var1 := var1 + 1;
+        if var1 > 20 then exit;
+        end if;
+    end loop;
+end;
+/
+// WHILE
+declare
+    var1 int := 0;
+begin   
+    WHILE var1 >= 0 loop
+        dbms_output.put_line(var1);
+        var1 := var1 + 1;
+        if var1 > 20 then exit;
+        end if;
+    end loop;
+end;
+/
+--Ejercicio 15. Realiza un programa que haga lo indicado en el ejercicio 13 pero emplea un bucle WHILE.
+declare
+    num1 int := 0;
+begin
+    while num1 <= 20 loop
+        dbms_output.put_line(num1);
+        num1 := num1 + 1; --me lo suma segun ponga el numero
+    end loop;
+end;
+/
+
+// FOR
+--Ejercicio 16. el 13 pero con FOR
+declare
+begin
+    for i in 1..20 loop
+        dbms_output.put_line(i);
+    end loop;
+end;
+/
+-- Ejercicio 17. El 13 pero con FOR in reverse
+declare
+begin
+    for i in reverse 0..20 loop
+        dbms_output.put_line(i);
+    end loop;
+end;
+/
+--Ejercicio 18 
+/*Realiza un programa que muestre por pantalla los números pares hasta llegar a 40, inclusive.
+Nota: la función MOD(m,n) devuelve el resto de dividir el parámetro m entre el parámetro n.*/
+declare 
+    i int;
+begin
+    for indice in 0..40 loop
+        i := mod(indice,2); 
+        if i = 0 and indice != 0 then --CONDICION PAR
+     -- if i != 0 then --CONDICION IMPAR
+            dbms_output.put_line(indice);
+        end if;
+    end loop;
+end;
+/
+begin
+    for indice in 0..40 loop 
+        if mod(indice,2)= 0 and indice != 0 then --CONDICION PAR
+            dbms_output.put_line(indice);
+        end if;
+    end loop;
 end;
 /
