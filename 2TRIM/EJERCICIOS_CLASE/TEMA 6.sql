@@ -859,3 +859,12 @@ begin
     end loop;
 end;
 /
+-- Ejercicio 19. Realiza un programa que muestre por pantalla las tablas de multiplicar del 1 al 10.
+begin
+    for i in 1..10 loop
+        for j in 1..10 loop
+            dbms_output.put_line(i || 'x' || j || '=' || i*j);
+        end loop;
+    end loop;
+end;
+/
