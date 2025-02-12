@@ -868,3 +868,23 @@ begin
     end loop;
 end;
 /
+-- MIÉRCOLES 12 DE FEBRERO DE 2025
+-- TEMA6 PDF 02. REGISTROS Y TABLAS
+set serveroutput on;
+declare
+    V1 dept.deptno%type;
+    fila1 dept%rowtype; --FILA1.DEPTNO, FILA.DNAME, FILA1.LOC
+    type departSinLoc is record(
+        codigoDept dept.deptno%type, 
+        dname dept.dname%type
+        );
+        filaDepartamento departSinLoc;
+begin
+    filaDepartamento.codigoDept := 1;
+    filaDepartamento.dname := 'TIC';    
+    dbms_output.put_line(filaDepartamento.dname);
+    
+end;
+/
+
+
