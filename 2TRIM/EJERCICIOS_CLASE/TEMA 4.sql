@@ -526,3 +526,26 @@ SELECT ESTADIO FROM EQUIPOS;
 SELECT ESTADIO FROM PARTIDOS;
 SELECT ESTADIO FROM EQUIPOS MINUS SELECT ESTADIO FROM PARTIDOS ; 
 
+
+// JUEVES 13 DE FEBRERO DE 2025 
+-- # Actividades subconsultas.
+
+-- 1. Mostrar los nombres de los empleados tengan un salario mayor que el de JAMES.
+
+-- 2. Mostrar los nombres de los empleados que trabajan en el mismo departamento que SMITH. Ordena el resultado por nombre.
+
+-- 3. Mostrar los nombres de los empleados que trabajan en el mismo departamento que SMITH. Ordena el resultado.
+
+-- 4. Mostrar qué empleados fueron contratados antes que MILLER.
+SELECT * FROM EMP WHERE HIREDATE < (SELECT HIREDATE FROM EMP WHERE ENAME = 'MILLER');
+-- 5. Mostrar qué empleados del departamento donde trabaja FORD, ganan más que lo que gana JAMES.
+
+-- 6. Mostrar cómo se llama el departamento donde trabaja SCOTT.
+
+-- 7. ¿Cuántos empleados ganan menos que MILLER?
+
+-- 8. ¿En qué localidad trabaja KING?
+
+-- 9. ¿Cómo se llaman los departamentos en los que hay algún CLERK?
+
+-- 10. ¿Cómo se llaman los departamentos en los que no hay ningún ANALYST?
