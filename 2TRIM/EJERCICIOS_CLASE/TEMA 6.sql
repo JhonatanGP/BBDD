@@ -25,7 +25,7 @@ begin
     dbms_output.put_line('Hoy es ' || sysdate || '.');
 end;
 /
-//  JUEVES 23/01/2025  PDF 00INTRODUCCIÓN PAG 16
+--  JUEVES 23/01/2025  PDF 00INTRODUCCIÓN PAG 16
 set serveroutput on;
 declare
     v1 int := 5; -- declarar e inicializar
@@ -54,9 +54,9 @@ begin
 end;
 /
 
-// PDF 01 CONSTRUCCIÓN DE GUIONES PAG 4
+--PDF 01 CONSTRUCCIÓN DE GUIONES PAG 4
 set serveroutput on;
-//type
+--type
 declare
     v1 int := 5; -- declarar e inicializar
     v2 varchar2(10);
@@ -80,7 +80,7 @@ begin
     dbms_output.put_line(nombreFutbolista);
 end;
 /
-//rowtype
+--  rowtype
 declare
     v1 int := 5;
     v2 varchar2(10);
