@@ -39,18 +39,19 @@ SELECT E1.ENAME, E1.EMPNO, E2.ENAME, E2.EMPNO FROM EMP E1 JOIN EMP E2 ON E1.MGR 
 -- SELECT E1.ENAME, E1.EMPNO, E2.ENAME, E2.EMPNO FROM EMP E1 JOIN EMP E2 ON E2.MGR = E1.EMPNO; ESTE NO
 
 --114. Seleccionar nombre, código de empleado, nombre de su jefe y código de empleado de su jefe para todos los empleados (se deben mostrar TODOS, incluso los que no tienen jefe).
-SELECT E1.ENAME, E1.EMPNO, E2.ENAME, E2.EMPNO FROM EMP E1  LEFT JOIN EMP E2 ON E1.MGR = E2.EMPNO;
+SELECT E1.ENAME, E1.EMPNO, E2.ENAME, E2.EMPNO FROM EMP E1 LEFT JOIN EMP E2 ON E1.MGR = E2.EMPNO;
 
 --115. Seleccionar código departamento, nombre de empleado y nombre de jefe de cada empleado del departamento que está en BOSTON.
-SELECT E1.ENAME, E1.EMPNO, E2.ENAME, E2.EMPNO FROM EMP E1  LEFT JOIN EMP E2 ON E1.MGR = E2.EMPNO JOIN DEPT ON E1.DEPTNO = DEPT.DEPTNO WHERE LOC = 'BOSTON';
-select dept.deptno, e.ename, e2.ename , loc from emp e join dept on e.deptno = dept.deptno join emp e2 on e.mgr = e2.empno where dept.loc = 'BOSTON';
+SELECT E1.DEPTNO, E1.ENAME, E2.ENAME FROM EMP E1 LEFT JOIN EMP E2 ON E1.MGR = E2.EMPNO JOIN DEPT ON E1.DEPTNO = DEPT.DEPTNO WHERE LOC = 'BOSTON';
 
 --116. Seleccionar nombre y fecha contrato de los empleados contratados posteriormente al empleado 'WARD'.
-SELECT * FROM DEPT,EMP;
+SELECT ENAME, HIREDATE FROM EMP WHERE HIREDATE < (SELECT HIREDATE FROM EMP WHERE ENAME = 'WARD');
 
 --117. Seleccionar nombre y fecha de contrato de los empleados, además del nombre y fecha de contrato de su jefe, siempre y cuando la fecha del contrato del empleado fuera anterior a la fecha de contrato de su jefe.
+SELECT A.ENAME, A.HIREDATE, B.ENAME, B.HIREDATE FROM EMP A JOIN EMP B ON A.MGR = B.EMPNO AND A.HIREDATE < B.HIREDATE;
 
 --118. Listar todos los nombres cuya longitud sea menor que la media de todas las longitudes de nombres de empleados redondeado al entero superior.
+SELECT ENAME FROM EMP WHERE LENGTH(ENAME) < (SELECT AVG(LENGTH(ENAME)) FROM EMP);
 
 --119. Seleccionar el nombre de los empleados y el nombre del departamento al que pertenecen, siempre y cuando el nombre del departamento comience por la letra 'S'.
- 
+SELECT E.ENAME, D.DNAME FROM EMP E JOIN DEPT D ON E.DEPTNO = D.DEPTNO WHERE D.DNAME LIKE '%S';
