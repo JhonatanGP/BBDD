@@ -278,7 +278,102 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE(EMPLEADOMASNOVEL.DEPARTAMENTOV.NOMBRE);
 END;
 /
+-- JUEVES 6 DE MARZO DE 2025
 
+--Boletín de ejercicios GROUP BY  BBDD EMP-DEPT.SQL
+
+--1. Muestra la cantidad de empleados en cada departamento.
+SELECT * FROM EMP;
+SELECT * FROM DEPT;
+SELECT DEPT.DNAME,COUNT(*) FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO GROUP BY DEPT.DNAME;
+
+--2. Calcula el salario promedio de los empleados en cada departamento.
+SELECT DEPT.DNAME,ROUND(AVG(EMP.SAL),2) FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO GROUP BY DEPT.DNAME;
+
+--3. Encuentra el salario más alto y más bajo en cada departamento.
+SELECT DEPT.DNAME,MAX(SAL),MIN(SAL) FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO GROUP BY DEPT.DNAME;
+
+--4. Suma los salarios de todos los empleados por departamento.
+SELECT DEPT.DNAME, SUM(EMP.SAL) FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO GROUP BY DEPT.DNAME;
+
+--5. Cuenta cuántos empleados hay en cada tipo de cargo (JOB).
+SELECT E1.JOB,COUNT(*) FROM EMP E1 JOIN EMP E2 ON E1.DEPTNO = E2.DEPTNO GROUP BY E1.JOB; -- NO SÉ
+SELECT E1.JOB, COUNT(*) FROM EMP E1 GROUP BY E1.JOB;
+
+--6. Calcula el salario promedio por cargo.
+SELECT JOB,ROUND(AVG(EMP.SAL),2) FROM EMP GROUP BY JOB;
+
+--7. Muestra solo los departamentos que tienen más de 5 empleados.
+SELECT DEPT.DNAME,COUNT(*) FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO GROUP BY DEPT.DNAME HAVING COUNT(*) >= 5;
+
+--8. Calcula el salario promedio de cada cargo y ordénalo de mayor a menor.
+SELECT E1.JOB,ROUND(AVG(SAL),2) FROM EMP E1 GROUP BY E1.JOB ORDER BY ROUND(AVG(SAL),2) DESC;
+
+--9. Suma la comisión total otorgada en cada departamento.
+SELECT DEPT.DNAME,DECODE(SUM(COMM),NULL,0,SUM(COMM)) FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO GROUP BY DEPT.DNAME;
+
+--10. Cuenta cuántos empleados tienen comisión (COMM IS NOT NULL) y cuántos no (COMM IS NULL).
+SELECT COUNT(*) FROM EMP WHERE COMM IS NOT NULL UNION SELECT COUNT(*) FROM EMP WHERE COMM IS NULL;
+
+--11. Cuenta cuántos empleados fueron contratados cada año.
+SELECT TO_CHAR(HIREDATE,'YYYY'),COUNT(*) FROM EMP GROUP BY TO_CHAR(HIREDATE,'YYYY');
+
+--12. Cuenta cuántos empleados fueron contratados en cada mes.
+
+
+--13. Encuentra el departamento con el mayor total de salarios.
+
+--14. Encuentra el cargo con el menor salario promedio.
+
+--15. Lista los departamentos con al menos 3 empleados.
+
+--16. Calcula el salario promedio de empleados que tienen comisión y los que no.
+
+--17. Cuenta cuántos empleados hay por combinación de cargo y departamento.
+
+--18. Suma los salarios de los empleados por combinación de cargo y departamento.
+
+--19. Lista los departamentos con un salario promedio mayor a 2000.
+
+--20. Lista los departamentos donde hay al menos un empleado que gana más de 2900.
+
+
+--PLSQL
+set serveroutput on;
+declare
+    type jefe is record(  -- IS RECORD CREA UN OBJETO Y ABAJO SUS VARIABLES
+        nombre emp.ename%type,
+        codigo emp.empno%type,
+        salario emp.sal%type
+    );
+    type empleado is record(  --CREO EMPLEADO Y SUS ATRIBUTOS
+        nombre emp.ename%type,
+        codigo emp.empno%type,
+        salario emp.sal%type,
+        sujefe jefe
+    );
+    empleado1 empleado;  -- CREO EMPLEADO1 DE TIPO EMPLEADO
+    empleado2 empleado;  -- CREO EMPLEADO2 DE TIPO EMPLEADO
+    jefe1 jefe;          -- CREO JEFE1 DE TIPO JEFE
+begin
+    jefe1.nombre := 'Alejandro'; -- LE DOY VALOR A CADA VARIABLE
+    empleado1.nombre := 'Inda';
+    empleado1.sujefe := jefe1;
+    --Empleado2, su nombre, codigo y salario sean los del empleado que haya sido contratado el primero
+    select ename,empno,sal,mgr into empleado2.nombre,empleado2.codigo,empleado2.salario,empleado2.sujefe from emp where hiredate = (select min(hiredatae) from emp);
+    
+    --Empleado2 tiene sujefe, rellénalo con su jefe de verdad (MGR)
+    select ename,sal into empleado2.sujefe.nombre, empleado2.sujefe.salario from emp where empno = empleado2.sujefe.codigo;
+    
+    dbms_output.put_line(empleado1.nombre);
+    dbms_output.put_line(empleado1.sujefe.nombre);
+    dbms_output.put_line('--');
+    dbms_output.put_line(empleado2.nombre||'|'||empleado2.codigo||'|'||empleado2.salario);
+    dbms_output.put_line(empleado2.sujefe.nombre||'|'||empleado2.sujefe.codigo||'|'||empleado2.sujefe.salario);
+end;
+/
+ 
+select * from emp order by hiredate;
 
 
 
