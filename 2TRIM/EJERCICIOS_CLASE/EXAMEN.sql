@@ -273,3 +273,16 @@ insert into comandas values (29,1,3,5,'SERVIDO','02-03-2021','21:37');
 insert into comandas values (30,1,3,3,'COBRADO','02-03-2021','21:55');
 insert into comandas values (31,1,3,2,'COBRADO','02-03-2021','21:55');
 insert into comandas values (32,1,3,5,'COBRADO','02-03-2021','21:55');
+
+BEGIN
+FOR cur_rec IN (SELECT table_name FROM user_tables)
+LOOP
+EXECUTE IMMEDIATE 'DROP TABLE ' || cur_rec.table_name || ' CASCADE CONSTRAINTS';
+END LOOP;
+END;
+/
+ 
+CONNECT / AS SYSDBA;
+SHUTDOWN IMMEDIATE;
+STARTUP RESTRICT;
+DROP DATABASE;
