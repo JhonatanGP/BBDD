@@ -406,3 +406,18 @@ Luego crea una variable datosAtleta que sea del tipo misAtletas.
 
 3.5 Si existe solo un atleta con esa fecha de nacimiento, muestra los nombres de las carreras en las que haya participado. Guarda en la variable 
 datosAtleta el nombre y la fecha de nacimiento del atleta. */
+
+set serveroutput on;
+declare
+    fechaIntr date := '&introduzca_fecha_nacimiento';
+    
+begin
+    dbms_output.put_line(fechaIntr);
+end;
+/
+
+
+
+
+
+
