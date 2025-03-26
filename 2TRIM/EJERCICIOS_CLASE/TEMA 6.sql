@@ -886,5 +886,162 @@ begin
     
 end;
 /
+----------------------------------- 3º TRIMESTRE MIERCOLES 26 DE MARZO DE 2025.--------------------------------------------
+-- TEMA6 PDF 02. REGISTROS Y TABLAS .PAG 17
+set serveroutput on;
+declare
+    type tipoTabla is table of varchar2(50) index by binary_integer;
+    datos tipoTabla;
+begin
+    datos(1) := 'casa';
+    datos(2) := 'perro';
+    dbms_output.put_line(datos(1));
+    dbms_output.put_line(datos(2));
+end;
+/
 
+/*Ejercicio 7
+Declarar una tabla de números y asignarle con un bucle for los números del 1 al 10. Además de asignar el valor dentro 
+del bucle, mostrar el valor de la tabla por pantalla en cada iteración. */
+set serveroutput on;
+declare
+    type tablaNum is table of number index by binary_integer;
+    datos tablaNum;
+begin
+    for indice in 1 ..10 loop 
+    datos(indice) := indice;
+    dbms_output.put_line(datos(indice));
+    end loop;
+end;
+/
 
+/*Ejercicio 8
+Declarar una tabla de ‘personas’. Donde ‘personas’ es un tipo registro que almacena nombre, apellido1 y apellido2.
+Asignarle valores para una persona e imprimirlos por pantalla.*/
+set serveroutput on;
+declare
+    type personas is record (
+    nombre varchar2(50),
+    apellido1 varchar2(50),
+    apellido2 varchar2(50)
+    );
+    type tablaPersonas is table of personas index by binary_integer;
+    datos tablaPersonas;
+begin
+    datos(1).nombre := 'Jhonatan';
+    datos(1).apellido1 := 'Guzman';
+    datos(1).apellido2 := 'Panozo';
+    datos(2).nombre := 'Antonio';
+    datos(2).apellido1 := 'Martin';
+    datos(2).apellido2 := 'Lopez';
+    dbms_output.put_line(datos(1).nombre ||' '|| datos(1).apellido1 ||' '|| datos(1).apellido2 ||'.');
+    dbms_output.put_line(datos(2).nombre ||' '|| datos(2).apellido1 ||' '|| datos(2).apellido2 ||'.');
+    dbms_output.put_line(datos.first);
+    dbms_output.put_line(datos.last);
+    dbms_output.put_line(datos.count);
+    datos.delete(datos.last);
+    dbms_output.put_line(datos.count);
+    if datos.exists(3) then
+    dbms_output.put_line(datos(3).apellido1);
+    end if;    
+end;
+/
+/*Funciones de tablas
+Cuando trabajamos con tablas de PL/SQL podemos utilizar las siguientes funciones:
+    nombredetabla.funcion
+FIRST. Devuelve el menor índice de la tabla.
+NULL si está vacía.
+LAST. Devuelve el mayor índice de la tabla.
+NULL si está vacía.
+EXISTS(i). Utilizada para saber si en un cierto índice hay almacenado un valor. Devolverá
+TRUE si en el índice i hay un valor. Se emplea en estructuras de control.
+COUNT. Devuelve el número de elementos de la tabla PL/SQL.
+PRIOR (n). Devuelve el número del índice anterior a n en la tabla.
+NEXT(n). Devuelve el número del índice posterior a n en la tabla.*/
+
+/*Ejercicio 9
+Sobre el ejercicio 7:
+1. Utilizar la función COUNT para devolver el número de elementos.
+2. Recorrerlo con FIRST Y LAST.
+3. Eliminar el último de la tabla y devolver el número total de elementos.
+4. Preguntar si existe valor en la posición 10.*/
+set serveroutput on;
+declare
+    type tablaNum is table of number index by binary_integer;
+    datos tablaNum;
+begin
+    for indice in 1 ..10 loop 
+    datos(indice) := indice;
+    dbms_output.put_line(datos(indice));
+    end loop;
+    -- 1
+    dbms_output.put_line(datos.count);
+    -- 2
+    for i in datos.first ..datos.last loop
+    dbms_output.put_line(datos(i));
+    end loop;
+    -- 3
+    datos.delete(datos.last);
+    -- 4
+    if datos.exists(10) then
+    dbms_output.put_line('Existe: ' || datos(10));
+    else
+    dbms_output.put_line('No existe.');
+    end if; 
+end;
+/
+
+/*Ejercicio 10
+Se quiere mostrar por pantalla los datos de ciertos empleados (tabla emp). Se pide:
+? Se pedirá al usuario por la entrada de plsql que introduzca dos valores integer que coincidan con dos empnos de la tabla
+emp, y se guardarán en una tabla de integers.
+? Se debe crear una tabla que contendrá como valores todos los campos de las filas de emp cuyo empno coincida con los de la
+tabla anterior. Puedes usar registros o %rowtype.
+? Recorre la tabla anterior mostrando por la salida los valores de cada columna de los dos registros.
+NOTA: debes usar las funciones FIRST, LAST, COUNT, etc. para los índices de tus bucles. Usa por ejemplo empno 7839 y 7698.*/
+
+declare
+    valor1 emp.empno%type := '&mete_valor1';
+    valor2 emp.empno%type := '&mete_valor2';
+    type tabla1 is table of emp.empno%type index by binary_integer;
+    misEmp1 tabla1;
+    cont1 int;
+    cont2 int;
+    type tabla2 is table of emp%rowtype index by binary_integer;
+    misEmp2 tabla2;
+begin
+    misEmp1(1) := valor1;
+    misEmp1(2) := valor2;
+    dbms_output.put_line(misEmp1(2));
+    select count(*) into cont1 from emp where empno = misEmp1(1);
+    select count(*) into cont2 from emp where empno = misEmp1(2);
+    
+
+end;
+/
+
+declare
+    valor1 emp.empno%type := '&mete_valor1';
+    valor2 emp.empno%type := '&mete_valor2';
+    type tablaInt is table of emp.empno%type index by binary_integer;
+    misEmpnos tablaInt;
+    contador1 int;
+    contador2 int;
+    type tablaEmp is table of emp%rowtype index by binary_integer;
+    datosEmp tablaEmp;
+begin
+    misEmpnos(1) := valor1;
+    misEmpnos(2) := valor2;
+    dbms_output.put_line(misEmpnos(2));
+    select count(*) into contador1 from emp where empno = misEmpnos(1);
+    select count(*) into contador2 from emp where empno = misEmpnos(2);
+    if contador1 > 0 and contador2 > 0 then
+        for i in misEmpnos.first..misEmpnos.last loop
+            select * into datosEmp(i) from emp where empno = misEmpnos(i);
+        end loop;
+        dbms_output.put_line(datosEmp(1).ename);
+    else
+        dbms_output.put_line('No existe empno');
+    end if;
+end;
+/
