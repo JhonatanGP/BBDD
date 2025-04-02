@@ -886,6 +886,10 @@ begin
     
 end;
 /
+
+
+
+
 ----------------------------------- 3º TRIMESTRE MIERCOLES 26 DE MARZO DE 2025.--------------------------------------------
 -- TEMA6 PDF 02. REGISTROS Y TABLAS .PAG 17
 set serveroutput on;
@@ -1044,4 +1048,208 @@ begin
         dbms_output.put_line('No existe empno');
     end if;
 end;
+/
+------------------- MIERCOLES 02 de ABRIL DE 2025 -----------------
+-------- PDF 03 CURSORES ---------------
+SELECT *  FROM ASIGNATURAS;
+SELECT *  FROM ESTUDIANTES;
+SELECT *  FROM MATRICULAS;
+
+set serveroutput on;
+DECLARE
+    DATOS ESTUDIANTES%ROWTYPE;
+BEGIN
+    SELECT * INTO DATOS FROM ESTUDIANTES WHERE CODIGO = 6;
+    dbms_output.put_line('OK');
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+    dbms_output.put_line('NO HAY DATOS');
+    WHEN TOO_MANY_ROWS THEN
+    dbms_output.put_line('HAY MÁS DE UN DATO');
+END;
+/
+
+/* Cursores implícitos. Excepciones.
+Ejercicio 1.
+1. Definir un cursor implícito para obtener por pantalla el nombre y los apellidos del estudiante con DNI=’00000000T’ de la tabla ESTUDIANTES. 
+NOTA: tener en cuenta que el DNI puede no existir en la tabla.
+2. Prueba ahora con el DNI 97898989T*/
+set serveroutput on;
+DECLARE
+    NOMBRE1 ESTUDIANTES.NOMBRE%TYPE;
+    APELLIDOS1 ESTUDIANTES.APELLIDOS%TYPE;
+BEGIN
+    SELECT NOMBRE,APELLIDOS INTO NOMBRE1,APELLIDOS1 FROM ESTUDIANTES WHERE DNI = '97898989T';
+    dbms_output.put_line(NOMBRE1 || '|' || APELLIDOS1);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+    dbms_output.put_line('NO HAY DATOS');
+END;
+/
+-- Los Cursores implicitos llevan  SELECT * INTO DATOS ;
+
+/*Ejercicio 2.
+1. Definir un cursor implícito para obtener por pantalla el dni y los apellidos del estudiante cuyo nombre sea Marta en la tabla ESTUDIANTES
+NOTA: tener en cuenta tanto que puede no existir ningún estudiante que se llame así o que pueda haber varios con el mismo nombre.
+2. Prueba ahora con el nombre Blanca.  */
+set serveroutput on;
+DECLARE
+    DNI1 ESTUDIANTES.NOMBRE%TYPE;
+    APELLIDOS1 ESTUDIANTES.APELLIDOS%TYPE;
+BEGIN
+    SELECT DNI,APELLIDOS INTO DNI1,APELLIDOS1 FROM ESTUDIANTES WHERE NOMBRE = 'Blanca';
+    dbms_output.put_line(DNI1 || '|' || APELLIDOS1);
+EXCEPTION
+    WHEN TOO_MANY_ROWS THEN
+    dbms_output.put_line('HAY MÁS DE UN DATO');
+END;
+/
+----  OTRA FORMA CON ROWTYPE---------
+DECLARE
+    DATOS ESTUDIANTES%ROWTYPE;
+BEGIN
+    SELECT DNI,APELLIDOS INTO DATOS.DNI, DATOS.APELLIDOS FROM ESTUDIANTES WHERE NOMBRE = 'Marta';
+    dbms_output.put_line(DATOS.DNI || '|' || DATOS.APELLIDOS);
+EXCEPTION
+    WHEN TOO_MANY_ROWS THEN
+    dbms_output.put_line('HAY MÁS DE UN DATO');
+END;
+/
+--- EJEMPLO --
+DECLARE
+    DATOS ESTUDIANTES%ROWTYPE;
+    CURSOR CURSORESTUDIANTES IS SELECT * FROM ESTUDIANTES;
+    CONT INT := 0;
+BEGIN
+    OPEN CURSORESTUDIANTES;
+    LOOP
+        FETCH CURSORESTUDIANTES INTO DATOS;
+        EXIT WHEN CURSORESTUDIANTES%NOTFOUND;
+        dbms_output.put_line(DATOS.NOMBRE);
+        CONT := +1;
+    END LOOP;
+    CLOSE CURSORESTUDIANTES;
+END;
+/
+-- Los Cursores explícitos NO  llevan  INTO DATOS ;
+
+/*Ejercicio 3.
+Definir un cursor explícito que seleccione el nombre, apellidos y DNI de la tabla ESTUDIANTES. Abrir el cursor, extraer el primer dato, mostrar 
+cuántos registros se han procesado (uno) y cerrarlo. Luego mostrar el nombre del estudiante del registro procesado en el cursor.
+¿Qué sucede si ponemos dos FETCH? */
+set serveroutput on;
+DECLARE
+    DATOS ESTUDIANTES%ROWTYPE;
+    CURSOR C_EST IS SELECT * INTO DATOS FROM ESTUDIANTES; -- * PORQUE ES ROWTYPE, SINO NO
+BEGIN
+    OPEN C_EST;
+    FETCH C_EST INTO DATOS;
+    FETCH C_EST INTO DATOS;
+    dbms_output.put_line(DATOS.NOMBRE || '|' || DATOS.APELLIDOS || '|' || DATOS.DNI);
+    CLOSE C_EST;
+END;
+/
+
+/*Ejercicio 4.
+Definir un cursor explícito que seleccione el nombre, apellidos y DNI de la tabla ESTUDIANTES. Recorrerlo y mostrar todos los datos recuperados.
+Escribir al final el número de filas recuperadas en total. */
+set serveroutput on;
+DECLARE
+    DATOS ESTUDIANTES%ROWTYPE;
+    CURSOR C_EST IS SELECT *  FROM ESTUDIANTES; 
+BEGIN
+    OPEN C_EST;
+    LOOP
+        FETCH C_EST INTO DATOS;
+        EXIT WHEN C_EST%NOTFOUND;
+    dbms_output.put_line(DATOS.NOMBRE);
+    END LOOP;
+    dbms_output.put_line('Total:' || C_EST%rowcount);
+    CLOSE C_EST;
+END;
+/
+--- con while --
+DECLARE
+    DATOS ESTUDIANTES%ROWTYPE;
+    CURSOR C_EST IS SELECT *  FROM ESTUDIANTES; 
+BEGIN
+    OPEN C_EST;
+    FETCH C_EST INTO DATOS;
+    WHILE C_EST%FOUND LOOP
+        dbms_output.put_line(DATOS.NOMBRE);
+        FETCH C_EST INTO DATOS;
+    END LOOP;
+    dbms_output.put_line('Total:' || C_EST%rowcount);
+    CLOSE C_EST;
+END;
+/
+
+/*Ejercicio 5.
+Definir un cursor explícito que seleccione el nombre y la fecha de nacimiento de la tabla ESTUDIANTES. Recorrerlo y mostrar todos los datos 
+recuperados con WHILE LOOP. Escribir al final el número de filas recuperadas en total. */
+set serveroutput on;
+DECLARE
+    DATOS ESTUDIANTES%ROWTYPE;
+    CURSOR C_EST IS SELECT *  FROM ESTUDIANTES; -- O TMB CURSOR DATOS IS SELECT NOMBRE,FECHA_NACIMIENTO FROM ESTUDIANTES;
+BEGIN
+    OPEN C_EST;
+    FETCH C_EST INTO DATOS; -- DATOS.NOMBRE, DATOS.FECHA_NACIMIENTO;
+    WHILE C_EST%FOUND LOOP
+        dbms_output.put_line(DATOS.NOMBRE ||' - '||DATOS.FECHA_NACIMIENTO);
+        FETCH C_EST INTO DATOS; -- DATOS.NOMBRE, DATOS.FECHA_NACIMIENTO;
+    END LOOP;
+    dbms_output.put_line('Total:' || C_EST%rowcount);
+    CLOSE C_EST;
+END;
+/
+
+-- FOR: CON FOR NO SE PUEDE USAR FOUND NI ROWCOUNT, NINGUN ATRIBUTO.
+DECLARE
+    CURSOR C_EST IS SELECT *  FROM ESTUDIANTES; -- O TMB CURSOR DATOS IS SELECT NOMBRE,FECHA_NACIMIENTO FROM ESTUDIANTES;
+    CONT INT := 0;
+BEGIN
+    FOR I IN C_EST LOOP
+        dbms_output.put_line(I.NOMBRE ||' - '||I.FECHA_NACIMIENTO);
+        CONT := CONT + 1;
+    END LOOP;
+    dbms_output.put_line('Total:' || CONT);
+END;
+/
+--- O DE OTRA FORMA SIN CURSOR --
+DECLARE
+    CONT INT := 0;
+BEGIN
+    FOR I IN (SELECT *  FROM ESTUDIANTES) LOOP
+        dbms_output.put_line(I.NOMBRE ||' - '||I.FECHA_NACIMIENTO);
+        CONT := CONT + 1;
+    END LOOP;
+    dbms_output.put_line('Total:' || CONT);
+END;
+/
+
+/*Ejercicio 7.
+Se quiere mostrar por pantalla el nombre y apellidos de los estudiantes que se llamen de cierta forma. Para ello se pedirá al usuario que introduzca 
+el nombre a buscar. El formato requerido para mostrar por pantalla es el siguiente (todo en mayús): “APELLIDOS, NOMBRE”. Ej.: CARRASCO PEREZ, MARTA.
+En el supuesto de que SELECT no se traiga ningún registro, mostrar por pantalla “NO HAY DATOS”. Utiliza un bucle WHILE.
+Lanza la ejecución para el nombre “Marta” y después para el nombre “Luis”. */
+set serveroutput on;
+DECLARE
+    NOMBRE1 VARCHAR2(50):= '&NOMBRE';
+    APELLIDOS1 VARCHAR2(50):= '&APELLIDOS';
+    DATOS ESTUDIANTES%ROWTYPE;
+    CURSOR C_EST IS SELECT *  FROM ESTUDIANTES where nombre = NOMBRE1 and apellidos = APELLIDOS1; 
+BEGIN
+    OPEN C_EST;
+    FETCH C_EST INTO DATOS; 
+    WHILE C_EST%FOUND LOOP
+        dbms_output.put_line(DATOS.NOMBRE ||' - '||DATOS.apellidos);
+        FETCH C_EST INTO DATOS; 
+    END LOOP;
+    CLOSE C_EST;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+    dbms_output.put_line('NO HAY DATOS');
+    WHEN TOO_MANY_ROWS THEN
+    dbms_output.put_line('HAY MÁS DE UN DATO');
+END;
 /
