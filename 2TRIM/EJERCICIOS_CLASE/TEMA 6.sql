@@ -1253,3 +1253,259 @@ EXCEPTION
     dbms_output.put_line('HAY MÁS DE UN DATO');
 END;
 /
+
+
+------------ JUEVES 03 DE ABRIL DE 2025 ----------------------------
+
+create table dept(
+  deptno number(2,0),
+  dname  varchar2(14),
+  loc    varchar2(13),
+  constraint pk_dept primary key (deptno)
+);
+ 
+create table emp(
+  empno    number(4,0),
+  ename    varchar2(10),
+  job      varchar2(9),
+  mgr      number(4,0),
+  hiredate date,
+  sal      number(7,2),
+  comm     number(7,2),
+  deptno   number(2,0),
+  constraint pk_emp primary key (empno),
+  constraint fk_deptno foreign key (deptno) references dept (deptno)
+);
+
+insert into dept
+values(10, 'ACCOUNTING', 'NEW YORK');
+insert into dept
+values(20, 'RESEARCH', 'DALLAS');
+insert into dept
+values(30, 'SALES', 'CHICAGO');
+insert into dept
+values(40, 'OPERATIONS', 'BOSTON');
+ 
+insert into emp
+values(
+ 7839, 'KING', 'PRESIDENT', null,
+ to_date('17-11-1981','dd-mm-yyyy'),
+ 5000, null, 10
+);
+insert into emp
+values(
+ 7698, 'BLAKE', 'MANAGER', 7839,
+ to_date('1-5-1981','dd-mm-yyyy'),
+ 2850, null, 30
+);
+insert into emp
+values(
+ 7782, 'CLARK', 'MANAGER', 7839,
+ to_date('9-6-1981','dd-mm-yyyy'),
+ 2450, null, 10
+);
+insert into emp
+values(
+ 7566, 'JONES', 'MANAGER', 7839,
+ to_date('2-4-1981','dd-mm-yyyy'),
+ 2975, null, 20
+);
+insert into emp
+values(
+ 7788, 'SCOTT', 'ANALYST', 7566,
+ to_date('13-JUL-87','dd-mm-rr') - 85,
+ 3000, null, 20
+);
+insert into emp
+values(
+ 7902, 'FORD', 'ANALYST', 7566,
+ to_date('3-12-1981','dd-mm-yyyy'),
+ 3000, null, 20
+);
+insert into emp
+values(
+ 7369, 'SMITH', 'CLERK', 7902,
+ to_date('17-12-1980','dd-mm-yyyy'),
+ 800, null, 20
+);
+insert into emp
+values(
+ 7499, 'ALLEN', 'SALESMAN', 7698,
+ to_date('20-2-1981','dd-mm-yyyy'),
+ 1600, 300, 30
+);
+insert into emp
+values(
+ 7521, 'WARD', 'SALESMAN', 7698,
+ to_date('22-2-1981','dd-mm-yyyy'),
+ 1250, 500, 30
+);
+insert into emp
+values(
+ 7654, 'MARTIN', 'SALESMAN', 7698,
+ to_date('28-9-1981','dd-mm-yyyy'),
+ 1250, 1400, 30
+);
+insert into emp
+values(
+ 7844, 'TURNER', 'SALESMAN', 7698,
+ to_date('8-9-1981','dd-mm-yyyy'),
+ 1500, 0, 30
+);
+insert into emp
+values(
+ 7876, 'ADAMS', 'CLERK', 7788,
+ to_date('13-JUL-87', 'dd-mm-rr') - 51,
+ 1100, null, 20
+);
+insert into emp
+values(
+ 7900, 'JAMES', 'CLERK', 7698,
+ to_date('3-12-1981','dd-mm-yyyy'),
+ 950, null, 30
+);
+insert into emp
+values(
+ 7934, 'MILLER', 'CLERK', 7782,
+ to_date('23-1-1982','dd-mm-yyyy'),
+ 1300, null, 10
+);
+commit;
+
+--Boletín ejercicios con cursores EMP-DEPT
+/*1 Se quiere visualizar el nombre y la fecha de alta de todos los empleados, ordenados por el nombre de Z a A.*/
+set serveroutput on;
+DECLARE
+    CURSOR C_E IS SELECT *  FROM EMP ORDER BY ENAME DESC; 
+    CONT INT := 0;
+BEGIN
+    FOR I IN C_E LOOP
+        dbms_output.put_line(I.ENAME ||' - '||I.HIREDATE);
+        CONT := CONT + 1;
+    END LOOP;
+    dbms_output.put_line('Total:' || CONT);
+END;
+/
+--- O DE OTRA FORMA SIN CURSOR --
+DECLARE
+BEGIN
+    FOR I IN (SELECT *  FROM EMP ORDER BY ENAME DESC) LOOP
+        dbms_output.put_line(I.ENAME ||' - '||I.HIREDATE);
+    END LOOP;  
+END;
+/
+/*2 Encuentra el primer empleado con un sueldo mayor que 2000. Muestra su nombre y su salario (solo del primero). 
+NOTA: siempre puedes salir de un bucle con exit;*/
+set serveroutput on;
+DECLARE
+    CURSOR C_E IS SELECT *  FROM EMP WHERE SAL > 2000; 
+BEGIN
+    FOR I IN C_E LOOP
+        dbms_output.put_line(I.ENAME ||' - '||I.SAL);
+        EXIT;
+    END LOOP;
+END;
+/
+--- O DE OTRA FORMA  --
+DECLARE
+    CURSOR C_E IS SELECT *  FROM EMP WHERE SAL > 2000; 
+    EMPLEADO EMP%ROWTYPE;
+BEGIN
+    FOR EMPLEADO IN C_E LOOP
+        dbms_output.put_line(EMPLEADO.ENAME ||' - '||EMPLEADO.SAL);
+        EXIT;
+    END LOOP;
+END;
+/
+/*3 Pide al usuario que introduzca un empno y te muestre por la salida el empno, ename y la loc del departamento en el que trabaja*/
+set serveroutput on;
+DECLARE
+    EMPNO1 EMP.EMPNO%TYPE := &EMPNO;
+    CURSOR C_E IS SELECT *  FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO WHERE EMPNO1 = EMP.EMPNO; 
+    CONT INT := 0;
+BEGIN
+    FOR I IN C_E LOOP
+        dbms_output.put_line(I.EMPNO ||' - '||I.ENAME||' - '||I.LOC);
+        CONT := CONT + 1 ;
+    END LOOP;
+    IF CONT = 0 THEN
+        dbms_output.put_line('NO EXISTE');
+    END IF;    
+END;
+/
+--- OTRA FORMA----
+set serveroutput on;
+DECLARE
+    EMPNO1 EMP.EMPNO%TYPE := &EMPNO;
+    CURSOR C_E IS SELECT *  FROM EMP JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO WHERE EMPNO1 = EMP.EMPNO; 
+BEGIN
+    FOR I IN C_E LOOP
+        dbms_output.put_line(I.EMPNO ||' - '||I.ENAME||' - '||I.LOC);
+    END LOOP;
+END;
+/
+--- CURSOR EXPLICITO NO SE NECESITA EXCEPCIONES
+/*4 En la tabla EMP incrementar el salario el 10% a los empleados que tengan una comisi?n superior al 5% del salario. Para ello recorre cada uno de 
+los empleados, y en caso de que se de esa condici?n del 5%, realiza el update y muestra un mensaje con el nombre del empleado con sal actualizado.*/
+set serveroutput on;
+DECLARE
+    salNuevo emp.sal%type;
+BEGIN
+    for fila in ( select * from emp where comm > 0.05*sal ) LOOP
+        update emp set sal = sal * 1.10 where empno = fila.empno;
+        select sal into salNuevo from emp where empno = fila.empno;
+        dbms_output.put_line(fila.ename||': ' || salNuevo);
+    end loop;
+end;
+/
+
+
+/*5 Modifica el ejercicio anterior para, tras actualizar el salario, mostrar el nombre del empleado, la comisi?n, el salario antiguo y el salario 
+nuevo. Adem?s, cuando no se actualice el salario, indicar un mensaje "El empleado XXX no ha tenido subida en su salario".*/
+set serveroutput on;
+DECLARE
+    salNuevo emp.sal%type;
+BEGIN
+    for fila in ( select * from emp ) LOOP
+        if fila.comm > 0.05*fila.sal then
+            update emp set sal = sal * 1.10 where empno = fila.empno;
+            select sal into salNuevo from emp where empno = fila.empno;
+            dbms_output.put_line(fila.ename||', ' || fila.comm || ', ' || fila.sal || ': ' || salNuevo);
+        ELSE
+            dbms_output.put_line('El empleado ' || fila.ename || ' no ha tenido subida en su salario');
+        end if;
+    end loop;
+end;
+/
+/*6 Pide que introduzca el usuario una cadena de caracteres por teclado. Muestra el empno y el ename de todos los empleados que tengan en su ename 
+esa cadena introducida. Al finalizar, muestra un mensaje con el n?mero total de empleados que lo tienen.*/
+set serveroutput on;
+DECLARE
+    CAD VARCHAR2(50) := '&CADENA';
+    CONT INT := 0;
+BEGIN
+    for fila in (select EMPNO,ENAME from emp WHERE ENAME LIKE '%'||CAD||'%') 
+    LOOP
+        dbms_output.put_line(fila.EMPNO||', ' || fila.ENAME);
+    end loop;
+    SELECT COUNT(EMPNO) INTO CONT FROM EMP WHERE ENAME LIKE '%'||CAD||'%';
+    dbms_output.put_line('TOTAL: ' || CONT);
+end;
+/
+
+/*7 Muestra el nombre de cada departamento junto al n?mero de empleados que tiene, incluso si no tiene empleados.*/
+set serveroutput on;
+BEGIN
+    for fila in (select dname,count(empno) as contador from emp right join dept on dept.deptno = emp.deptno group by dname) LOOP
+        dbms_output.put_line(fila.dname || '-' || fila.contador);
+    end loop;
+end;
+/
+
+/*8 Busca todos los empleados que tienen salario + comisi?n mayor a 2000, y asignarles como salario esa suma. Solo puedes hacerlo si tienen comisi?n.
+Muestra por la salida el nombre de todos los empleados que modifiquen su salario, as? como el n?mero total de empleados que se han actualizados.*/
+
+/*9 Muestra el ename y sal de los cinco empleados con el salario m?s alto.*/
+
+/*10 Por cada puesto de trabajo(job), muestra el puesto y luego los dos empleados que tienen ese puesto y cobran menos. Si hay menos de dos empleados,
+muestra los que haya.*/
