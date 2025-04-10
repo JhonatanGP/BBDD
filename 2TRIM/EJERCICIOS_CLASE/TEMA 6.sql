@@ -1509,3 +1509,246 @@ Muestra por la salida el nombre de todos los empleados que modifiquen su salario
 
 /*10 Por cada puesto de trabajo(job), muestra el puesto y luego los dos empleados que tienen ese puesto y cobran menos. Si hay menos de dos empleados,
 muestra los que haya.*/
+
+
+
+
+
+--------------------------------------------------------  JUEVES 10 DE ABRIL  ------------------------------------------------------------------------ 
+--Excepciones
+set serveroutput on;
+declare
+    miDescripcion asignaturas.descripcion%type;
+    num int := 5;
+    miExcepcion exception;
+    numMiError int := -20001;
+begin
+    --dbms_output.put_line(4/0);
+    --Si num es menor de 5 no quiero que se siga ejecutando
+    if num < 5 then
+        raise miExcepcion;
+    else
+        raise_application_error(numMiError,'Este es un error personalizado');
+    end if;
+    --Primera excepción es no data found
+    --select descripcion into miDescripcion from asignaturas where codigo = 11;
+    --Segunda excepción es too many rows
+    select descripcion into miDescripcion from asignaturas where curso = 1;
+    dbms_output.put_line(miDescripcion);
+exception
+    when miExcepcion then
+        dbms_output.put_line(SQLCODE);
+        dbms_output.put_line('No se permite que valga menos de 5');
+    when others then
+        if sqlcode = -1422 then
+            dbms_output.put_line('Hay demasiados valores');
+        elsif sqlcode = -20001 then
+            dbms_output.put_line('El mío');
+        else 
+            dbms_output.put_line(SQLCODE);
+            dbms_output.put_line(SQLERRM);
+            dbms_output.put_line('Error');
+        end if;
+end;
+/
+ 
+--Ejercicio 1
+set serveroutput on;
+declare
+    v_numerador number := 10;
+    v_denominador number := 0;
+    v_resultado number;
+begin
+    v_resultado := v_numerador / v_denominador;
+    dbms_output.put_line('resultado: ' || v_resultado);
+exception
+    when others then
+        dbms_output.put_line('código de error: ' || sqlcode);
+        dbms_output.put_line('mensaje de error: ' || sqlerrm);
+end;
+/
+--Ejercicio 1.1
+set serveroutput on;
+declare
+    numerador number := 10;
+    denominador number := 0;
+    resultado number;
+begin
+    resultado := numerador / denominador;
+    dbms_output.put_line('resultado: ' || resultado);
+exception
+    when others then
+        dbms_output.put_line(substr(SQLERRM,instr(SQLERRM,': ') +2));
+end;
+/
+ 
+--Ejercico 2
+set serveroutput on;
+declare
+    total_estudiantes number;
+    nalumnos exception;
+begin
+    select count(*) into total_estudiantes from estudiantes;
+ 
+    if total_estudiantes = 0 then
+        raise nalumnos;
+    else
+        dbms_output.put_line('número total de estudiantes: ' || total_estudiantes);
+    end if;
+exception
+    when nalumnos then
+        dbms_output.put_line('no hay alumnos en la tabla estudiantes.');
+end;
+/
+--Ejercicio 3
+set serveroutput on;
+declare
+    total_estudiantes number;
+    nalumnos exception;
+    muchos_alumnos exception;
+begin
+    select count(*) into total_estudiantes from estudiantes;
+    if total_estudiantes = 0 then
+        raise nalumnos;
+    elsif total_estudiantes >= 5 then
+        raise muchos_alumnos;
+    else
+        dbms_output.put_line('número total de estudiantes: ' || total_estudiantes);
+    end if;
+exception
+    when nalumnos then
+        dbms_output.put_line('no hay alumnos en la tabla estudiantes.');
+    when muchos_alumnos then
+        dbms_output.put_line('Hay menos de 5 estudiantes.');
+end;
+/
+----------------------   Boletín ejercicios con excepciones 
+
+/*1 Pide al usuario que introduzca un código de asignatura y muestra el código junto al curso y descripción. Controla las siguiente excepciones 
+mostrando un mensaje de error: no existe ese código en la tabla asignaturas.*/
+set serveroutput on;
+declare
+    v_codigo_asignatura asignaturas.codigo%type := &codigo_asignatura;
+    v_curso asignaturas.curso%type;
+    v_descripcion asignaturas.descripcion%type;
+begin
+    select curso, descripcion
+    into v_curso, v_descripcion
+    from asignaturas
+    where codigo = v_codigo_asignatura;
+    dbms_output.put_line('Código: ' || v_codigo_asignatura || ', Curso: ' || v_curso || ', Descripción: ' || v_descripcion);
+exception
+    when no_data_found then
+        dbms_output.put_line('Error: No existe una asignatura con el código proporcionado.');
+end;
+/
+/*2 Se quiere pedir al usuario que introduzca un nivel de curso (primer curso o segundo), introduciendo 1 o 2 por teclado. Una vez se meta el nivel,
+muestra por la salida todas las descripciones de las asignaturas de ese nivel. Excepciones a tener en cuenta mostrando un mensaje de error: el nivel no
+es un número válido y el número no existe en la tabla asignaturas. NOTA: para saber si han introduciendo un número, puedes controlarlo con la excepción
+value_error a la que se accede cuando se produce un error en una conversión (por ejemplo al llamar a to_number() y no puede hacer la conversión).*/
+--variables para probar: 1, 2, 3, S
+set serveroutput on;
+declare
+    numeroCadena varchar2(100) := '&metevalor';
+    numeroNumerico int;
+    numeroNoValido exception;
+    cuantosHay int := 0;
+    noExisteCurso exception;
+begin
+    --lanzar value_error si falla to_number(). '5' > to_number('5') = 5 no falla. to_number('H') FALLA -> value_error
+    numeroNumerico := to_number(numeroCadena);
+    if numeroNumerico = 1 or numeroNumerico = 2 then
+        select count(curso) into cuantosHay from asignaturas where curso = numeroNumerico;
+        if cuantosHay > 0 then
+            for fila in (select descripcion from asignaturas where curso = numeroNumerico) loop
+                dbms_output.put_line(fila.descripcion);
+            end loop;
+        else
+            raise noExisteCurso;
+        end if;
+    else
+        raise numeroNoValido;
+    end if;
+exception
+    when value_error then
+        dbms_output.put_line('Tienes que meter un número, no una letra');
+    when numeroNoValido then
+        dbms_output.put_line('Número distinto a 1 o 2, no se puede.');
+    when noExisteCurso then
+        dbms_output.put_line('No existe ese curso en bd.');
+end;
+/
+ 
+/*3 Se quiere una lista donde se muestre el curso y cuántas asignaturas hay en ese curso (una línea por cada curso). 
+Ejemplo: Curso 1: 4 asignaturas. Excepciones a tener en cuenta: crea una excepción personalizada llamada cursoConRedes de forma que si el curso tiene
+la asignatura con descripción "Redes" no debes mostrarlo por pantalla, terminando la ejecución de tu código y mostrando en tu excepción el siguiente
+mensaje: "No se puedes mostrar datos porque existe la asignatura de Redes".*/
+set serveroutput on;
+SELECT CURSO,COUNT(CURSO) FROM ASIGNATURAS GROUP BY CURSO;
+
+declare
+    cursor misCursos is select curso,count(curso) from asignaturas group by curso;
+    miCurso asignaturas.curso%type;
+    miCuenta int := 0;
+    cursoConRedes exception;
+    existeRedes asignaturas.codigo%type;
+begin
+    select codigo into existeRedes from asignaturas where descripcion = 'Redes2';
+    raise cursoConRedes;
+exception
+    when no_data_found then
+        open misCursos;
+        fetch misCursos into miCurso,miCuenta;
+        dbms_output.put_line('Curso ' || miCurso || ': ' || miCuenta || ' asignaturas');
+        fetch misCursos into miCurso,miCuenta;
+        dbms_output.put_line('Curso ' || miCurso || ': ' || miCuenta || ' asignaturas');
+        close misCursos;
+    when cursoConRedes then
+        dbms_output.put_line('No se puedes mostrar datos porque existe la asignatura de Redes');
+end;
+/
+
+/*4 Se quiere mostrar por la salida el nombre de cada asignatura y la nota media obtenida en las matrículas de esa asignatura por parte de los alumnos.
+Excepciones a tener en cuenta: crea una excepción personalizada menosDeCinco que, una vez mostradas todas las notas media, si alguna tiene un valor 
+menor a cinco, llamar a esa excepción personalizada indicando el mensaje "Hay alguna asignatura con una media inferior a cinco".*/
+set serveroutput on;
+SELECT * FROM MATRICULAS;
+SELECT * FROM ASIGNATURAS;
+select asignaturas.descripcion,avg(matriculas.nota) from asignaturas join matriculas on cod_asignatura = codigo group by asignaturas.descripcion;
+declare
+    cursor misCursos is select asignaturas.descripcion,avg(matriculas.nota) from asignaturas join matriculas on cod_asignatura = codigo group by asignaturas.descripcion;
+    menosDeCinco exception;
+    cuantosHay int := 0;
+begin
+    numeroNumerico := to_number(numeroCadena);
+    if numeroNumerico = 1 or numeroNumerico = 2 then
+        select count(curso) into cuantosHay from asignaturas where curso = numeroNumerico;
+        if cuantosHay > 0 then
+            for fila in (select descripcion from asignaturas where curso = numeroNumerico) loop
+                dbms_output.put_line(fila.descripcion);
+            end loop;
+        else
+            raise noExisteCurso;
+        end if;
+    else
+        raise numeroNoValido;
+    end if;
+exception
+    when value_error then
+        dbms_output.put_line('Tienes que meter un número, no una letra');
+    when numeroNoValido then
+        dbms_output.put_line('Número distinto a 1 o 2, no se puede.');
+    when noExisteCurso then
+        dbms_output.put_line('No existe ese curso en bd.');
+end;
+/
+ 
+/*5 Modifica el ejercicio 4 para mostrar por la salida solo las asignaturas que tienen una media superior a 5. A continuación, si has mostrado una o más
+asignaturas con una media con decimales, llama a una excepción personalizada tienenDecimales que muestre todas esas asignaturas con decimales, separadas
+por coma.*/
+ 
+ 
+/*6 Se quiere pedir por teclado el código de una asignatura. Muestra una lista de todos los alumnos que están matriculados (dni y nombre de los almnos) 
+y la nota que han sacado. Ten en cuenta las siguientes excepciones: el código de asignatura es un número, existe en la tabla asignaturas y además hay 
+matrículas de alumnos en esa asignatura. Para esa última excepción, crea una excepción personalizada que se llame noMatriculas.*/
+
