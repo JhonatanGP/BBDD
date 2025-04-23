@@ -1752,3 +1752,253 @@ por coma.*/
 y la nota que han sacado. Ten en cuenta las siguientes excepciones: el código de asignatura es un número, existe en la tabla asignaturas y además hay 
 matrículas de alumnos en esa asignatura. Para esa última excepción, crea una excepción personalizada que se llame noMatriculas.*/
 
+
+
+-------------       MIERCOLES 23 DE ABRIL DE 2025  ------------------------
+
+-- PROCEDIMIENTO SIN PARAMETROS
+set serveroutput on;
+CREATE OR REPLACE PROCEDURE MIPROCEDIMIENTO
+IS
+    CONT INT := 0;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(CONT);
+END;
+/
+BEGIN
+    MIPROCEDIMIENTO;
+    MIPROCEDIMIENTO;
+    MIPROCEDIMIENTO;
+END;
+/
+
+-- PROCEDIMIENTO CON PARAMETROS DE ENTRADA
+set serveroutput on;
+CREATE OR REPLACE PROCEDURE MIPROCEDIMIENTO2(MINUM IN INT)
+IS
+    CONT INT := 10;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(CONT + MINUM);
+END;
+/
+BEGIN
+    MIPROCEDIMIENTO2(5);
+    MIPROCEDIMIENTO2(1);
+    MIPROCEDIMIENTO2(4);
+END;
+/
+-- PROCEDIMIENTO CON PARAMETROS DE SALIDA
+set serveroutput on;
+CREATE OR REPLACE PROCEDURE MIPROCEDIMIENTO3(MINUM IN INT,RESTA OUT INT)
+IS
+    CONT INT := 10;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(CONT + MINUM);
+    RESTA := MINUM - CONT;
+END;
+/
+DECLARE
+    PARAM2 INT;
+BEGIN
+    MIPROCEDIMIENTO3(5,PARAM2);
+    DBMS_OUTPUT.PUT_LINE(PARAM2);
+    MIPROCEDIMIENTO3(1,PARAM2);
+    DBMS_OUTPUT.PUT_LINE(PARAM2);
+    MIPROCEDIMIENTO3(4,PARAM2);
+    DBMS_OUTPUT.PUT_LINE(PARAM2);
+END;
+/
+-- PROCEDIMIENTO CON PARAMETROS DE ENTRADA/SALIDA
+set serveroutput on;
+CREATE OR REPLACE PROCEDURE MIPROCEDIMIENTO4(MINUM IN INT,RESTA IN OUT INT)
+IS
+    CONT INT := 10;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(CONT + MINUM);
+    RESTA := RESTA + MINUM - CONT;
+END;
+/
+DECLARE
+    PARAM2 INT := 4;
+BEGIN
+    MIPROCEDIMIENTO4(5,PARAM2);
+    DBMS_OUTPUT.PUT_LINE(PARAM2);
+    MIPROCEDIMIENTO4(1,PARAM2);
+    DBMS_OUTPUT.PUT_LINE(PARAM2);
+    MIPROCEDIMIENTO4(4,PARAM2);
+    DBMS_OUTPUT.PUT_LINE(PARAM2);
+END;
+/
+-- PROCEDIMIENTO CON PARAMETROS DE ENTRADA/SALIDA
+set serveroutput on;
+CREATE OR REPLACE PROCEDURE MIPROCEDIMIENTO5(RESTA OUT INT)
+IS
+    CONT INT := 10;
+BEGIN
+    RESTA := CONT * 2;
+END;
+/
+DECLARE
+    PARAM2 INT := 4;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(PARAM2); -- 4
+    MIPROCEDIMIENTO5(PARAM2);
+    DBMS_OUTPUT.PUT_LINE(PARAM2); -- 20
+END;
+/
+
+--- PDF 05 PROCEDIMIENTOS Y FUNCIONES
+/*Ejercicio 1
+Crea un procedimiento que se llame consultarEmpleado. Debe tomar una variable de entrada v_empno con el tipo de dato del campo empno de la tabla emp.
+Debe tomar como variables de salida v_ename y v_job, cuyos tipos de datos deben coincidir con los de los campos ename y job de la tabla emp. 
+Controla con una excepción que no se encuentre ningún dato con el valor de v_empno de entrada, mostrando el mensaje “No se encontraron datos”. */
+--  DEL PERA
+set serveroutput on;
+create or replace procedure consultarEmpleado(v_empno in emp.empno%type, v_ename out emp.ename%type, v_job out emp.job%type)
+is 
+    cont int;
+    noData exception;
+begin
+    select count(*) into cont from emp where v_empno = empno;
+    if cont = 0 then
+        raise noData;
+    else
+        select ename,job into v_ename,v_job from emp where v_empno = empno;
+    end if;
+exception
+    when noData then
+        dbms_output.put_line('No se encuentran datos');
+end;
+/
+declare
+codigo emp.empno%type := &introduzcaEmpno;
+nombre emp.ename%type;
+trabajo emp.job%type;
+begin
+    consultarEmpleado(codigo,nombre,trabajo);
+if nombre is not null and trabajo is not null then
+    dbms_output.put_line('Nombre: ' || nombre || ' - Trabajo: ' || trabajo);
+end if;
+end;
+/
+
+-- DE INDA
+create or replace procedure consultarEmpleado(
+    v_empno in emp.empno%type,
+    v_ename out emp.ename%type,
+    v_job out emp.job%type)
+IS
+BEGIN
+    select ename,job into v_ename,v_job from emp where empno = v_empno;
+EXCEPTION
+    when no_data_found THEN
+        dbms_output.put_line('No se encontraron datos');
+end;
+/
+create or replace procedure consultarEmpleadoCE(
+    v_empno in emp.empno%type,
+    v_ename out emp.ename%type,
+    v_job out emp.job%type)
+IS
+    --cursor misDatos is select * from emp;
+    contador int := 0;
+    noHaydatos exception;
+BEGIN
+    --for datos in misDatos LOOP
+    for datos in (select * from emp) loop
+        if datos.empno = v_empno THEN
+            v_ename := datos.ename;
+            v_job := datos.job;
+            contador := 1;
+        end if;
+    end loop;
+    if contador = 0 THEN
+        raise noHaydatos;
+    end if;
+EXCEPTION
+    when noHaydatos THEN
+        dbms_output.put_line('No se encontraron datos');
+end;
+/
+--Ejercicio 2 Invoca al procedimiento consultarEmpleado pasando tres variables (id, nombre y  uesto). La variable id debe obtener su valor pidiéndola
+--por pantalla al usuario. Se debe  mostrar por pantalla el resultado devuelto del procedimiento anterior en las variables de salida nombre y puesto.
+DECLARE
+    miEname emp.ename%type;
+    miJob emp.job%type;
+    miCodigo emp.empno%type := 7831;
+BEGIN
+    consultarEmpleadoCE(miCodigo,miEname,miJob);
+    if miEname is not null and miJob is not null then
+        dbms_output.put_line(miEname || ' ' || miJob);
+    end if;
+end;
+/
+select * from emp;
+
+/* Ejercicio 4
+Escribe un procedimiento denominado is_today que muestre por pantalla la fecha de hoy, y luego llámalo desde un bloque anónimo.*/
+create or replace procedure IS_TODAY(HOY DATE)
+IS
+BEGIN
+     dbms_output.put_line(HOY);
+end;
+/
+BEGIN   
+    IS_TODAY(SYSDATE);
+END;
+/
+CREATE OR REPLACE PROCEDURE today_is is
+BEGIN
+  DBMS_OUTPUT.PUT_LINE( 'Hoy es ' || TO_CHAR(SYSDATE, ' DD/MM/YYYY') );
+END today_is;
+/
+BEGIN
+    TODAY_IS(); 
+END;
+/
+
+/*Ejercicio 5
+Escribe un procedimiento denominado is_today2 que, dada la fecha de hoy, la escriba por pantalla. Invoca al procedimiento con la fecha de hoy*/
+CREATE OR REPLACE PROCEDURE today2_is ( fecha DATE ) IS
+BEGIN
+  DBMS_OUTPUT.PUT_LINE( 'Hoy es ' || TO_CHAR(fecha, ' DD/MM/YYYY') );
+END;
+/
+DECLARE 
+BEGIN
+  today2_is(sysdate);  
+END;
+/
+
+--42 REALIZA UN PROCEDIMIENTO MOSTRARBECARIOS QUE MUESTRE A LOS DOS EMP MÁS NUEVOS DE CADA DEPART. TRATA LAS EXCEPCIONES QUE CONSIDERES NECESARIAS.
+CREATE OR REPLACE PROCEDURE MOSTRARBECARIOS (ENAME ) IS
+BEGIN
+  DBMS_OUTPUT.PUT_LINE();
+END;
+/
+DECLARE 
+BEGIN
+    
+END;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
