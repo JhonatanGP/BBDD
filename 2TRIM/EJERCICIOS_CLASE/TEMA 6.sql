@@ -1970,23 +1970,199 @@ BEGIN
 END;
 /
 
---42 REALIZA UN PROCEDIMIENTO MOSTRARBECARIOS QUE MUESTRE A LOS DOS EMP MÁS NUEVOS DE CADA DEPART. TRATA LAS EXCEPCIONES QUE CONSIDERES NECESARIAS.
-CREATE OR REPLACE PROCEDURE MOSTRARBECARIOS (ENAME ) IS
+
+----------------    JUEVES 24 DE ABRIL DE 2025   -----------------------
+-- FUNCIONES  ---
+-- FUNCIONES SIN PARAMETROS
+set serveroutput on;
+CREATE OR REPLACE FUNCTION MIFUNCION
+RETURN VARCHAR2
+IS
 BEGIN
-  DBMS_OUTPUT.PUT_LINE();
+    -- DBMS_OUTPUT.PUT_LINE('HOLA');
+    RETURN 'OK';
+END;
+/
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(MIFUNCION);
+END;
+/
+
+-- ¿QUÉ SUCEDE SI TENGO UNA EXCEPTION?
+SELECT * FROM DEPT;
+--CREAR LA FUNCION DAMEDEPTNO QUE RECIBA DNAME Y DEVUELVE SU DEPTNO
+create or replace function dameDeptno (v_name dept.dname%type)
+return dept.deptno%type
+is
+depar dept.deptno%type;
+begin
+    select deptno into depar from dept where dname  = v_name;
+    return depar;
+Exception 
+        when no_data_found then
+            dbms_output.put_line('No hay datos'); 
+        return -1;
+end;
+/
+declare
+nombre dept.dname%type := '&Introduzca_Deptno';
+resultado dept.deptno%type;
+begin
+    resultado := dameDeptno(nombre);
+    dbms_output.put_line(resultado); 
+end;
+/
+
+-- FUNCIONES CON PARAMETROS
+/*Queremos una función datoFecha a la que le pasaremos dos parámetros (siempre son de entrada). El primer parámetro es una fecha y el 
+segundo puede ser 'DIA' o 'MES', de forma que la función devuelva el nombre del mes o el nombre del día de la semana de esa fecha. 
+Ej. sysdate,'DIA' > JUEVES. sysdate,'MES' > ABRIL */
+create or replace function datoFecha(fecha in date,datoAMostrar in varchar2)
+return varchar2
+is
+begin
+    if datoAMostrar = 'DIA' then
+        return to_char(fecha,'DAY');
+    elsif datoAMostrar = 'MES' then
+        return to_char(fecha,'MONTH');
+    else
+        return 'No es correcto, debes pasar dia o mes';
+    end if;
+end;
+/
+begin
+    dbms_output.put_line(datoFecha(sysdate,'DIA'));
+    dbms_output.put_line(datoFecha('01/01/2025', 'MES'));
+    dbms_output.put_line(datoFecha('31/12/2025', 'DIA'));
+end;
+/
+drop function datoFecha;
+
+--Ejercicio 6
+--Crea una función nombreEstudiante, que dado un código de estudiante, devuelva su nombre y apellidos. Ten en cuenta que el no código exista.
+set serveroutput on;
+create or replace function nombreEstudiante(v_codigo estudiantes.codigo%type)
+return varchar2
+is
+nombreCompleto varchar2(250);
+begin
+    select nombre || ' ' || apellidos into nombreCompleto from estudiantes where codigo = v_codigo;
+    return nombreCompleto;
+exception 
+    when no_data_found then
+    return 'No hay estudiantes con ese codigo'; 
+end;
+/
+declare
+codigoE estudiantes.codigo%type := &IntroduzcaCodigo;
+begin
+    dbms_output.put_line(nombreEstudiante(codigoE));
+end;
+/
+--de inda
+create or replace function nombreEstudiante(codigoEstudiante estudiantes.codigo%type)
+return VARCHAR2
+IS
+    vnombre estudiantes.nombre%type;
+    vapellidos estudiantes.apellidos%type;
+BEGIN
+    select nombre,apellidos into vnombre,vapellidos from estudiantes where codigo = codigoEstudiante;
+    return vnombre || ' ' || vapellidos;
+EXCEPTION
+    when no_data_found THEN
+        return 'No existe ese código';
+end;
+/
+create or replace function nombreEstudiante2(codigoEstudiante estudiantes.codigo%type)
+return VARCHAR2
+IS
+    cursor datosEstudiantes is select nombre,apellidos from estudiantes where codigo = codigoEstudiante;
+    vnombre estudiantes.nombre%type;
+    vapellidos estudiantes.apellidos%type;
+    noHayDatos exception;
+BEGIN
+    open datosEstudiantes;
+    fetch datosEstudiantes into vnombre,vapellidos;
+    if datosEstudiantes%rowcount = 0 THEN
+        raise noHayDatos;
+    end if;
+    close datosEstudiantes;
+    return vnombre || ' ' || vapellidos;
+EXCEPTION
+    when noHayDatos THEN
+        return 'No existe ese código';
+end;
+/
+BEGIN
+    dbms_output.put_line(nombreEstudiante(20));
+    dbms_output.put_line(nombreEstudiante2(2));
+    dbms_output.put_line(nombreEstudiante2(20));
+end;
+/
+/*Ejercicio 7
+Crear una función totalEstudiantes, que devuelva el número total de estudiantes.*/
+set serveroutput on;
+create or replace function totalEstudiantes
+return int
+is
+cont int;
+begin
+    select count(*) into cont from estudiantes;
+    return cont;
+exception 
+    when no_data_found then
+    return 'No hay estudiantes con ese codigo'; 
+end;
+/
+begin
+    dbms_output.put_line('Hay ' || totalEstudiantes || ' estudiantes.');
+end;
+/
+
+--42 CREA UN PROCEDIMIENTO MOSTRARBECARIOS QUE MUESTRE A LOS DOS EMP MÁS NUEVOS DE CADA DEPART. TRATA LAS EXCEPCIONES QUE CONSIDERES NECESARIAS.
+CREATE OR REPLACE PROCEDURE MOSTRARBECARIOS 
+IS
+    cont int := 0;
+    noHayEmp exception;
+BEGIN
+    --Lo más fácil es recorrer todos los departamentos
+    for filaDept in (select * from dept) loop
+        cont := 0;
+        DBMS_OUTPUT.PUT_LINE(filaDept.deptno);
+        --Recorrer todos los empleados y mostrar los dos más nuevos
+        for filaEmp in (select * from emp where deptno = filaDept.deptno order by hiredate desc) loop
+            if cont >= 2 then
+                exit;
+            end if;
+            cont := cont +1;
+        DBMS_OUTPUT.PUT_LINE(filaEmp.ename);
+        end loop;
+    end loop;
+exception
+    when noHayEmp then
+        DBMS_OUTPUT.PUT_LINE('No hay empleados.');
 END;
 /
 DECLARE 
 BEGIN
-    
+    MOSTRARBECARIOS;
 END;
 /
+------------------ 01.ACTIVIDADES 1  ----------------------------------
 
+/*1.Se quiere saber si un año es bisiesto o no. Para ello, se debe pedir por pantalla introducir un año, y luego se mostrará un mensaje por
+pantalla indicando "El año es bisiesto" o "El año no es bisiesto", según corresponda. Un año es bisiesto si el resto de dividir el año 
+entre 4 es cero y además, el resto de dividir ese año entre 100 es distinto de cero o bien el resto de dividir ese año entre 400 es cero.*/
 
+/*2.Realiza el ejercicio anterior pero usando la siguiente condición para saber si es bisiesto: "un año bisiesto tiene 366 días".*/
 
+/*3.Obtener dos listas con los pares e impares desde el 1 hasta el número que se introduzca por pantalla.*/
 
+/*4.Dado un determinado código de departamento (DEPTNO) de la tabla DEPT, devolver por pantalla el nombre (DNAME).*/
 
+/*5.Obtener el nombre (ENAME) y puesto de trabajo (JOB) del empleado (tabla EMP) que tenga el código (EMPNO) igual a 7782.*/
 
+/*6.Pedir por pantalla un NIF (8 números y una letra). Comprobar si la letra es correcta y luego mostrar por pantalla si ese NIF es correcto.*/
 
 
 
