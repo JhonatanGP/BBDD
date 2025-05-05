@@ -1,9 +1,9 @@
 alter session set "_ORACLE_SCRIPT"=true;
-create user PROG identified by ceu
+create user casa identified by ceu
 default tablespace system
 quota unlimited on system;
-grant connect, create session, create table TO PROG;
-grant create procedure to T6;
+grant connect, create session, create table TO casa;
+grant create procedure to casa;
 
 --eje
 --entregas
@@ -11,3 +11,4 @@ grant create procedure to T6;
 --T6
 --EXAMEN
 --PROG
+--casa
