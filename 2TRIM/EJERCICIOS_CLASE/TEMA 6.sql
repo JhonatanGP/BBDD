@@ -2166,6 +2166,250 @@ entre 4 es cero y además, el resto de dividir ese año entre 100 es distinto de c
 
 
 
+----------------    Miércoles 14 DE Mayo DE 2025   -----------------------
+----------------    06. PAQUETES   -----------------------
+
+set serveroutput on;
+-- EJEMPLO DE PAQUETE CON UN TIPO DE DATO REGISTRO DECLARADO EN ÉL Y USADO DESPUÉS EN UNA FUNCIÓN COMO TIPO DE DATO DEVULETO
+CREATE OR REPLACE PACKAGE PRUEBAS
+IS
+    TYPE DATOS IS RECORD(
+        NOMBRE DEPT.DNAME%TYPE,
+        CIUDAD DEPT.LOC%TYPE
+    );
+    FUNCTION OBTENERDEPT (ID_DEPT DEPT.DEPTNO%TYPE) RETURN DATOS;
+END;
+/
+CREATE OR REPLACE PACKAGE BODY PRUEBAS
+IS
+    FUNCTION OBTENERDEPT (ID_DEPT DEPT.DEPTNO%TYPE) RETURN DATOS
+    IS
+        RESULTADO DATOS;
+    BEGIN
+        SELECT DNAME,LOC INTO RESULTADO.NOMBRE,RESULTADO.CIUDAD FROM DEPT WHERE DEPTNO = ID_DEPT;
+        RETURN RESULTADO;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE('NO EXISTE ESE DEPTNO');
+            RETURN NULL;
+    END;
+END;
+/
+SET SERVEROUTPUT ON;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(PRUEBAS.OBTENERDEPT(21).NOMBRE);
+    DBMS_OUTPUT.PUT_LINE(PRUEBAS.OBTENERDEPT(20).NOMBRE);
+    DBMS_OUTPUT.PUT_LINE(PRUEBAS.OBTENERDEPT(30).CIUDAD);
+END;
+/
+
+--EJEMPLO 1
+CREATE OR REPLACE PACKAGE PAQUETE1
+IS
+    PROCEDURE RESET_CONT(V_NUEVO NUMBER);
+END;
+/
+
+CREATE OR REPLACE PACKAGE BODY PAQUETE1
+IS
+    PROCEDURE RESET_CONT(V_NUEVO NUMBER)
+    IS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE(V_NUEVO);
+    END;
+
+END;
+/
+
+BEGIN
+    PAQUETE1.RESET_CONT(2);
+END;
+/
+
+--EJEMPLO 2 
+CREATE OR REPLACE PACKAGE PAQUETE1
+IS
+    PROCEDURE RESET_CONT(V_NUEVO NUMBER);
+    TYPE MIREGISTRO IS RECORD(
+    ID INT,
+    NOMBRE VARCHAR2(50)
+    );
+END;
+/
+
+CREATE OR REPLACE PACKAGE BODY PAQUETE1
+IS
+    PROCEDURE RESET_CONT(V_NUEVO NUMBER)
+    IS
+        MIVARIABLE MIREGISTRO;
+    BEGIN
+        MIVARIABLE.ID := 1;
+        DBMS_OUTPUT.PUT_LINE(V_NUEVO || '-' || MIVARIABLE.ID);
+    END;
+
+END;
+/
+
+BEGIN
+    PAQUETE1.RESET_CONT(2);
+END;
+/
+
+/*Ejercicio 1
+Escriba un paquete llamado operaciones con:
+? Función suma que dados dos números devuelva la suma de ellos.
+? Función resta que dado dos números devuelva la resta de ellos.
+? Función positivo que devuelva true si es positivo o false en caso contrario.
+Llamar a dichas funciones en un bloque anónimo.*/
+
+CREATE OR REPLACE PACKAGE OPERACIONES
+IS
+    FUNCTION SUMA(N1 INT, N2 INT) RETURN INT;
+    FUNCTION RESTA(N1 INT, N2 INT) RETURN INT;
+    FUNCTION POSITIVO(N1 INT) RETURN BOOLEAN;
+    
+END OPERACIONES;
+/
+
+CREATE OR REPLACE PACKAGE BODY OPERACIONES
+IS
+    FUNCTION SUMA (N1 INT, N2 INT) RETURN INT
+    IS
+    BEGIN
+    RETURN N1 + N2;
+    END;
+    
+    FUNCTION RESTA (N1 INT, N2 INT) RETURN INT
+    IS
+    BEGIN
+    RETURN N1 - N2;
+    END;
+    
+    FUNCTION POSITIVO(N1 INT) RETURN BOOLEAN
+    IS
+    BEGIN
+        IF N1 >= 0 THEN
+         RETURN TRUE;
+        ELSE
+            RETURN FALSE;
+        END IF;
+    END;
+END;
+/
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(OPERACIONES.SUMA(2,2));
+    DBMS_OUTPUT.PUT_LINE(OPERACIONES.RESTA(2,2));
+    DECLARE
+        estado varchar2(40) := 'Negativo';
+        numResta int;
+    BEGIN
+        numResta := operaciones.resta(10, 50);
+        if OPERACIONES.POSITIVO(numResta) then
+            estado := 'Positivo';
+        end IF;
+        DBMS_OUTPUT.PUT_LINE('El resultado es ' || numResta || ' y es ' || estado);
+    END;
+END;
+/
+/*Ejercicio 2
+Escriba un paquete gestionEMP con:
+? Procedimiento nuevoEmpleado que inserte un nuevo empleado con los siguientes datos:
+? Empno = 8000
+? Ename = JUAN
+? JOB = CLERK
+? MGR = 7902
+? HIREDATE = 01/05/22
+? SAL = 1500
+? COMM = NULL
+? DEPTNO = 20
+? Al insertar el nuevo empleado, debe mostrar un mensaje “Registro creado correctamente”.
+Llamar al procedimiento en un bloque anónimo y muestra el mensaje.*/
+CREATE OR REPLACE PACKAGE GESTIONEMP 
+IS
+    PROCEDURE nuevoEmpleado (EMP1 EMP%ROWTYPE);
+END GESTIONEMP;
+/
+
+CREATE OR REPLACE PACKAGE BODY GESTIONEMP
+IS
+    PROCEDURE nuevoEmpleado (EMP1 EMP%ROWTYPE)
+    IS
+    BEGIN
+        INSERT INTO EMP VALUES EMP1;
+    END;
+END;
+/
+
+DECLARE
+    EMP1  EMP%ROWTYPE;
+BEGIN
+    EMP1.EMPNO := 8000;
+    EMP1.ENAME := 'JUAN';
+    EMP.JOB := 'CLERK';
+    EMP1.MGR := 7902;
+    EMP1.HIREDATE := '01/05/22';
+    EMP1.SAL := 1500;
+    EMP1.COMM := NULL;
+    EMP1.DEPTNO := 20;
+    GESTIONEMP.nuevoEmpleado(EMP1);
+    dbms_output.put_line('Registro creado correctamente');
+END;
+/
+
+-- EL DE INDA
+create or replace package gestionEMP
+IS
+    procedure nuevoEmpleado(
+    id emp.empno%type,
+    nombre emp.ename%type,
+    puesto emp.job%type,
+    jefe emp.mgr%type,
+    fecha emp.hiredate%type,
+    salario emp.sal%type,
+    comision emp.comm%type,
+    departamento emp.deptno%type
+    );
+end;
+/
+create or replace package body gestionEMP
+is
+    procedure nuevoEmpleado(
+        id emp.empno%type,
+        nombre emp.ename%type,
+        puesto emp.job%type,
+        jefe emp.mgr%type,
+        fecha emp.hiredate%type,
+        salario emp.sal%type,
+        comision emp.comm%type,
+        departamento emp.deptno%type
+        )
+    IS
+        numEmpleadosEmpno int;
+        yaExiste exception;
+    BEGIN
+        select count(empno) into numEmpleadosEmpno from emp where empno = id;
+        if numEmpleadosEmpno = 0 then
+            insert into emp values (id,nombre,puesto,jefe,fecha,salario,comision,departamento);
+            commit;
+            dbms_output.put_line('Registro creado correctamente');
+        ELSE
+            raise yaExiste;
+        end if;
+    EXCEPTION
+        when yaExiste THEN
+            dbms_output.put_line('Ya existe ese empno, no se puede insertar');
+    end;
+end;
+/
+BEGIN
+    gestionEMP.nuevoEmpleado(8001,'JUAN','CLERK',7902,'01/05/22',1500,null,20);
+end;
+/
+drop procedure nuevoEmpleado;
+select * from emp;
+delete from emp where empno = 8000;
+commit;
 
 
 
