@@ -2411,13 +2411,250 @@ select * from emp;
 delete from emp where empno = 8000;
 commit;
 
+---------------- JUEVES 15 / 05 / 2025 Repaso eval3 enunciadosArchivo
+set serveroutput on;
+
+/*1. Crea un paquete llamado misFunciones que contenga una función llamada cuentaVocales que reciba como parámetro una palabra y devuelva 
+el número de vocales que tenga (independientemente de que estén en mayúsculas o minúsculas).*/
+create or replace package misFunciones
+IS
+    FUNCTION cuentaVocales (PALABRA VARCHAR2) RETURN INT;
+end misFunciones;
+/
+
+CREATE OR REPLACE PACKAGE BODY misFunciones
+IS
+    FUNCTION cuentaVocales (PALABRA VARCHAR2) RETURN INT   
+    IS
+        CONT INT := 0;
+    BEGIN
+        FOR I IN 1..LENGTH(PALABRA) LOOP
+            IF SUBSTR(LOWER(PALABRA),I,1) IN ('a','e','i','o','u') THEN
+            CONT := CONT +1;
+            END IF;
+        END LOOP;
+    RETURN CONT;    
+    END;
+    
+END;
+/
+
+BEGIN
+    dbms_output.put_line(misFunciones.cuentaVocales('aeijjjaA'));
+END;
+/
+/*1.2. Ahora crea un procedimiento mostrarEmpMas1Vocal dentro del paquete misFunciones que muestre el nombre de todos los empleados (ename 
+de la tabla emp) que tengan más de una vocal en su nombre. NOTA: utiliza la función cuentaVocales del paquete misFunciones.*/
+create or replace package misFunciones
+IS
+    FUNCTION cuentaVocales (PALABRA VARCHAR2) RETURN INT;
+    PROCEDURE mostrarEmpMas1Vocal; -- LOS PROCEDURE NO TIENEN RETURN.
+end misFunciones;
+/
+
+CREATE OR REPLACE PACKAGE BODY misFunciones
+IS
+    FUNCTION cuentaVocales (PALABRA VARCHAR2) RETURN INT   
+    IS
+        CONT INT := 0;
+    BEGIN
+        FOR I IN 1..LENGTH(PALABRA) LOOP
+            IF SUBSTR(LOWER(PALABRA),I,1) IN ('a','e','i','o','u') THEN
+            CONT := CONT +1;
+            END IF;
+        END LOOP;
+    RETURN CONT;    
+    END;
+    
+    PROCEDURE mostrarEmpMas1Vocal
+    IS
+    BEGIN
+        for E in (select ename from emp)loop -- COGE TODOS LOS CAMPOS DE EMP Y LOS GUARDA EN E
+        IF misFunciones.cuentaVocales(E.ENAME) > 1 THEN 
+             dbms_output.put_line(E.ENAME || ' TIENE MÁS DE UNA VOCAL');
+        END IF;
+        END LOOP;
+    END;
+    
+END;
+/
+
+BEGIN
+    dbms_output.put_line(misFunciones.cuentaVocales('aeijjjaA'));
+    misFunciones.mostrarEmpMas1Vocal();
+END;
+/
+
+/*3. Crea un crud con distintas funciones dentro de un nuevo paquete denominado miCrud para insertar departamentos, borrarlos o 
+modificarlos. Ten en cuenta que será necesario pasar como parámetro al menos la PK, comprobar que existe o no y actuar en consecuencia 
+(utiliza las excepciones que creas conveniente). NOTA: para el caso del borrado, se hará un borrado en cascada manual, es decir, habrá 
+que borrar primero todos los empleados de dicho departamento antes de borrar ese departamento.*/
+create or replace package miCrud 
+IS
+    function insertar_departamento( miDeptno dept.deptno%type, miDname dept.dname%type, miLoc dept.loc%type ) return int;    
+    FUNCTION INSERTAR_DEPT(MIDEPT DEPT%ROWTYPE) RETURN varchar2 ; --DEVUELVE 1 SI LO HACE O 0 SI NO LO HACE
+    --FUNCTION BORRAR_DEPT(CODIGO DEPT.DEPTNO%TYPE) RETURN ;
+end miCrud;
+/
+
+CREATE OR REPLACE PACKAGE BODY miCrud
+IS
+    function insertar_departamento( miDeptno dept.deptno%type, miDname dept.dname%type, miLoc dept.loc%type ) return int;    
+    IS
+    EXISTEDEPTNO INT;
+    YAHAYDEPTNO EXCEPTION;
+    BEGIN
+        SELECT COUNT(*) INTO EXISTEDEPTNO FROM DEPT WHERE DEPTNO = MIDEPTNO;
+        IF EXISTEDEPTNO = 0 THEN 
+            INSERT INTO DEPT VALUES (miDeptno,miDname,miLoc);
+        return 1;
+        ELSE
+    end;
+
+    FUNCTION INSERTAR_DEPT(MIDEPT DEPT%ROWTYPE) RETURN varchar2 
+    IS        
+    BEGIN
+      
+    RETURN  'No se ha insertado';  
+    END;
+    
+END;
+/
+DECLARE
+    departamentoNuevo dept%rowtype;
+BEGIN
+    departamentoNuevo.deptno := 2;
+    departamentoNuevo.dname := 'VENTAS';
+    departamentoNuevo.loc := 'SEVILLA';
+    IF miCrud.insertar_departamento(1,'WEB',null) = 1 THEN
+        dbms_output.put_line('Departamento insertado correctamente');
+    ELSE
+        dbms_output.put_line('No se ha insertado');
+    END IF;
+    dbms_output.put_line(miCrud.insertar_departamento2(departamentoNuevo));
+END;
+/
 
 
 
 
-
-
-
+--1. Crea un paquete llamado misFunciones que contenga una función llamada cuentaVocales que reciba como parámetro una palabra y devuelva el número de vocales que tenga (independientemente de que estén en mayúsculas o minúsculas).
+--2. Ahora crea un procedimiento mostrarEmpMas1Vocal dentro del paquete misFunciones que muestre el nombre de todos los empleados (ename de la tabla emp) que tengan más de una vocal en su nombre. NOTA: utiliza la función cuentaVocales del paquete misFunciones.
+create or replace package misFunciones
+IS
+    function cuentaVocales ( palabra varchar2 ) return int;
+    procedure mostrarEmpMas1Vocal;
+end;
+/
+create or replace package body misFunciones
+IS
+    function cuentaVocales ( palabra varchar2 ) return int
+    IS
+        contadorVocales int := 0;
+        letra char(1);
+    BEGIN
+        for i in 1..length(palabra) LOOP
+            letra := substr(palabra,i,1);
+            if lower(letra) in ('a','e','i','o','u') THEN
+                contadorVocales := contadorVocales + 1;
+            end if;
+        end loop;
+        return contadorVocales;
+    end;
+ 
+    procedure mostrarEmpMas1Vocal
+    IS
+    BEGIN
+        for fila in (select ename from emp) loop
+            if cuentaVocales(fila.ename) > 1 then
+                dbms_output.put_line(fila.ename);
+            end if;
+        end loop;
+    end;
+ 
+end;
+/
+BEGIN
+    dbms_output.put_line(misFunciones.cuentaVocales('pruebaaaaaaaop'));
+    misFunciones.mostrarEmpMas1Vocal;
+end;
+/
+--3. Crea un crud con distintas funciones dentro de un nuevo paquete denominado miCrud para insertar departamentos, borrarlos o modificarlos. Ten en cuenta que será necesario pasar como parámetro al menos la PK, comprobar que existe o no y actuar en consecuencia (utiliza las excepciones que creas conveniente). NOTA: para el caso del borrado, se hará un borrado en cascada manual, es decir, habrá que borrar primero todos los empleados de dicho departamento antes de borrar ese departamento.
+create or replace package miCrud
+IS
+    function insertar_departamento( miDeptno dept.deptno%type, miDname dept.dname%type, miLoc dept.loc%type ) return int;
+    function insertar_departamento2( miDepartamento dept%rowtype ) return varchar2;
+    function borrar_departamento( codigo dept.deptno%type) return varchar2;
+end;
+/
+create or replace package body miCrud
+IS
+    function insertar_departamento( miDeptno dept.deptno%type, miDname dept.dname%type, miLoc dept.loc%type ) return int
+    IS
+        existeDeptno int;
+        yaHayDeptno exception;
+    BEGIN
+        select count(*) into existeDeptno from dept where deptno = miDeptno;
+        if existeDeptno = 0 THEN
+            insert into dept values (miDeptno, miDname, miLoc);
+            return 1;
+        ELSE
+            raise yaHayDeptno;
+        end if;
+    EXCEPTION  
+        when yaHayDeptno THEN
+            dbms_output.put_line('Ese deptno ya existe en bd');
+            return 0;
+    end;
+ 
+    function insertar_departamento2( miDepartamento dept%rowtype ) return varchar2
+    IS
+    BEGIN
+        return 'No se ha insertado';
+    end;
+ 
+    function borrar_departamento( codigo dept.deptno%type) return varchar2
+    IS
+        existeDeptno dept.deptno%type;
+    BEGIN
+        select deptno into existeDeptno from dept where deptno = codigo;
+        delete from emp where deptno = codigo;
+        delete from dept where deptno = codigo;
+        return 'Borrado correctamente';
+    EXCEPTION
+        when no_data_found THEN
+            return 'No se puede borrar nada porque ese deptno no existe en bd';
+    end;
+end;
+/
+DECLARE
+    departamentoNuevo dept%rowtype;
+BEGIN
+    departamentoNuevo.deptno := 2;
+    departamentoNuevo.dname := 'VENTAS';
+    departamentoNuevo.loc := 'SEVILLA';
+    if miCrud.insertar_departamento(1,'WEB',null) = 1 THEN
+        dbms_output.put_line('Departamento insertado correctamente');
+    ELSE
+        dbms_output.put_line('No se ha insertado');
+    end if;
+    dbms_output.put_line(miCrud.insertar_departamento2(departamentoNuevo));
+    dbms_output.put_line(miCrud.BORRAR_DEPARTAMENTO(3));
+    dbms_output.put_line(miCrud.BORRAR_DEPARTAMENTO(20));
+end;
+/
+select * from dept;
+select * from emp;
+rollback;
+/*
+2.4 No emplees join, solo subconsultas. Se quiere saber el estado del avance, el día de la semana (obtenido desde el campo fecha) y la hora de los avances de las líneas de fabricación que sean de aquellas máquinas cuyo precio de venta sea mayor de 500 y menor de 1000. Devuelve todos los campos en minúsculas y con alias de columnas (valores de los alias los que quieras).
+*/
+alter session set nls_language = 'Spanish';
+select lower(estado), trim(to_char(fecha,'day')), hora from AVANCES_LINEAS_FABRICACION where id_maquina in (
+    select ref from maquinas where precio_venta > 500 and precio_venta < 1000
+);
+select ref from maquinas where precio_venta > 500 and precio_venta < 1000;
+ 
 
 
 
