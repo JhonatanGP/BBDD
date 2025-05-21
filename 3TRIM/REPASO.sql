@@ -319,9 +319,12 @@ select distinct upper(nombre_empresa) from clientes join avances_lineas_fabricac
 --2.2
 select maquinas.nombre, sum(cantidad) from maquinas join piezas_maquinas on ref=id_maquina join piezas on idpie = id_pieza
     group by  maquinas.nombre having sum(cantidad) >100 order by sum(cantidad) desc;
-    
 --2.3 
 select substr(nombre,instr(nombre,' ')+1,length(nombre)-instr(nombre,' ')) "Casos alimentación" from piezas where nombre like 'Alimentacion%';
+select length(nombre)-instr(nombre,' ') "Casos alimentación" from piezas ;
+select *  from piezas ;
+
+
 --2.4
 select lower(estado)"ESTADO", to_char(fecha,'day')"DIA",hora from avances_lineas_fabricacion where id_maquina 
     in (select ref from maquinas where precio_venta > 500 and precio_venta <1000);
